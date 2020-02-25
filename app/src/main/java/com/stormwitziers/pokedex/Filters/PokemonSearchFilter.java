@@ -13,9 +13,9 @@ public class PokemonSearchFilter extends Filter {
     private ArrayList<Pokemon> mDataFullList;
     private PokemonAdapter mAdapter;
 
-    public PokemonSearchFilter(PokemonAdapter adapter, Pokemon[] fullArray){
+    public PokemonSearchFilter(PokemonAdapter adapter, ArrayList<Pokemon> fullArray){
         mAdapter = adapter;
-        mDataFullList = new ArrayList<>(Arrays.asList(fullArray));
+        mDataFullList = fullArray;
     }
 
     @Override
@@ -48,9 +48,9 @@ public class PokemonSearchFilter extends Filter {
 
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-        Pokemon[] pokemons = (Pokemon[]) ((ArrayList) results.values).toArray(new Pokemon[0]);
+        ArrayList<Pokemon> pokemons = (ArrayList<Pokemon>) results.values;
 
-        mAdapter.setPokemonArray(pokemons);
+        mAdapter.setPokemonArrayList(pokemons);
         mAdapter.notifyDataSetChanged();
     }
 }

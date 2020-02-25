@@ -15,13 +15,15 @@ import com.stormwitziers.pokedex.Filters.PokemonSearchFilter;
 import com.stormwitziers.pokedex.Pokemon;
 import com.stormwitziers.pokedex.R;
 
+import java.util.ArrayList;
+
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> implements Filterable {
 
-    private Pokemon[] mData;
-    private Pokemon[] mFullData;
+    private ArrayList<Pokemon> mData;
+    private ArrayList<Pokemon> mFullData;
     private OnPokemonListener mOnPokemonListener;
 
-    public PokemonAdapter(Pokemon[] pokemons, OnPokemonListener onPokemonListener){
+    public PokemonAdapter(ArrayList<Pokemon> pokemons, OnPokemonListener onPokemonListener){
         this.mData = pokemons;
         this.mFullData = mData;
         this.mOnPokemonListener = onPokemonListener;
@@ -29,18 +31,18 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> impl
 
     @Override
     public int getItemCount() {
-        return mData.length;
+        return mData.size();
     }
 
-    public void setPokemonArray(Pokemon[] pokemons){
+    public void setPokemonArrayList(ArrayList<Pokemon> pokemons){
         mData = pokemons;
         notifyDataSetChanged();
     }
 
     public Pokemon getItemAtPosition(int position){
-        if(position < 0 || position > mData.length) { throw new ArrayIndexOutOfBoundsException(); }
+        if(position < 0 || position > mData.size()) { throw new ArrayIndexOutOfBoundsException(); }
 
-        return mData[position];
+        return mData.get(position);
     }
 
     @NonNull
@@ -52,8 +54,9 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> impl
 
     @Override
     public void onBindViewHolder(@NonNull PokemonViewHolder holder, int position) {
-        ((ImageView) holder.pokemonItem.getChildAt(0)).setImageDrawable(mData[position].getPicture());
-        ((TextView) holder.pokemonItem.getChildAt(1)).setText(mData[position].getName());
+        Pokemon pokemon = mData.get(position);
+        ((ImageView) holder.pokemonItem.getChildAt(0)).setImageDrawable(pokemon.getPicture());
+        ((TextView) holder.pokemonItem.getChildAt(1)).setText(pokemon.getName());
     }
 
     @Override

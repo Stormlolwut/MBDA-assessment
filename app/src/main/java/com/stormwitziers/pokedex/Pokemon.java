@@ -1,33 +1,37 @@
 package com.stormwitziers.pokedex;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
 
 import java.io.Serializable;
 
 public class Pokemon implements Serializable {
 
+    private int position;
     private String name;
     private Drawable picture;
     private float rating;
 
-    public String getName(){
-        return name;
-    }
+    public int getPosition() { return position; }
 
-    public Drawable getPicture(){
-        return picture;
-    }
+    public String getName(){ return name; }
 
-    public void setRating(float rating){
-        this.rating = rating;
-    }
+    public Drawable getPicture() { return picture; }
 
-    public float getRating(){
-        return rating;
-    }
+    public void setPicture(Drawable drawable) { picture = drawable; }
+
+    public void setRating(float rating) { this.rating = rating; }
+
+    public float getRating(){ return rating; }
 
     public Pokemon(String name, Drawable picture){
         this.name = name;
         this.picture = picture;
+    }
+
+    public Pokemon(int position, String name)
+    {
+        this.name = name;
+        this.position = position;
     }
 }

@@ -17,12 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.stormwitziers.pokedex.Pokemon;
 import com.stormwitziers.pokedex.PokemonList.PokemonAdapter;
+import com.stormwitziers.pokedex.PokemonList.PokemonLoader;
 import com.stormwitziers.pokedex.R;
 
+import java.util.ArrayList;
 
 
-public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokemonListener {
-
+public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokemonListener, PokemonLoader.IPokemonLoaderHandler {
+    private PokemonLoader mPokemonLoader;
     private RecyclerView mPokemonRecycleView;
     private PokemonAdapter mAdapter;
 
@@ -45,15 +47,28 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
     }
 
     private void addPokemonsToRecycleView(View view){
+        mPokemonLoader = new PokemonLoader(getContext(), this);
+        mPokemonLoader.loadPokemon(1);
+        mPokemonLoader.loadPokemon(2);
+        mPokemonLoader.loadPokemon(3);
+        mPokemonLoader.loadPokemon(4);
+        mPokemonLoader.loadPokemon(5);
+        mPokemonLoader.loadPokemon(6);
+        mPokemonLoader.loadPokemon(7);
+        mPokemonLoader.loadPokemon(8);
+        mPokemonLoader.loadPokemon(9);
+        mPokemonLoader.loadPokemon(10);
+        mPokemonLoader.loadPokemon(11);
+        mPokemonLoader.loadPokemon(11);
+        mPokemonLoader.loadPokemon(11);
+        mPokemonLoader.loadPokemon(11);
+        mPokemonLoader.loadPokemon(211);
+        mPokemonLoader.loadPokemon(131);
+        mPokemonLoader.loadPokemon(111);
+        mPokemonLoader.loadPokemon(121);
+        mPokemonLoader.loadPokemon(311);
 
-        Pokemon[] pokemonArray = {
-                new Pokemon("Bulbasaur", getResources().getDrawable(R.drawable.pokemon_bulbasaur)),
-                new Pokemon("Dragonite", getResources().getDrawable(R.drawable.pokemon_dragonite)),
-                new Pokemon("Pikachu", getResources().getDrawable(R.drawable.pokemon_pikachu)),
-                new Pokemon("Sonja", getResources().getDrawable(R.drawable.pokemon_pikachu))
-        };
-
-        mAdapter = new PokemonAdapter(pokemonArray, this);
+        mAdapter = new PokemonAdapter(mPokemonLoader.PokemonMap, this);
 
 
         mPokemonRecycleView = view.findViewById(R.id.pokemon_recycle_view);
@@ -91,6 +106,16 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
     @Override
     public void onPokemonClick(int position) {
         mOnPokemonSelected.onItemSelected(mAdapter.getItemAtPosition(position));
+    }
+
+    @Override
+    public void PokemonLoaded(int pokemonPosition) {
+        mAdapter.notifyItemInserted(pokemonPosition);
+    }
+
+    @Override
+    public void PokemonUpdated(int pokemonPosition) {
+        mAdapter.notifyItemChanged(pokemonPosition);
     }
 
     public interface OnPokemonSelected{
