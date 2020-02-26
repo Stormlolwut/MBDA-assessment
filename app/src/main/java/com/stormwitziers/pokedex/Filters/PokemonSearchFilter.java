@@ -4,18 +4,18 @@ import android.widget.Filter;
 
 import com.stormwitziers.pokedex.Pokemon;
 import com.stormwitziers.pokedex.PokemonList.PokemonAdapter;
+import com.stormwitziers.pokedex.PokemonList.PokemonLoader;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class PokemonSearchFilter extends Filter {
 
-    private ArrayList<Pokemon> mDataFullList;
+    private PokemonLoader mPokemonLoader;
     private PokemonAdapter mAdapter;
 
-    public PokemonSearchFilter(PokemonAdapter adapter, ArrayList<Pokemon> fullArray){
+    public PokemonSearchFilter(PokemonAdapter adapter, PokemonLoader pokemonLoader){
         mAdapter = adapter;
-        mDataFullList = fullArray;
+        mPokemonLoader = pokemonLoader;
     }
 
     @Override
@@ -25,17 +25,17 @@ public class PokemonSearchFilter extends Filter {
         ArrayList<Pokemon> filteredList = new ArrayList<>();
 
         if(constraint == null || constraint.length() < 1) {
-            filterResult.count = mDataFullList.size();
-            filterResult.values = mDataFullList;
+            filterResult.count = mPokemonLoader.PokemonList.size();
+            filterResult.values = mPokemonLoader.PokemonList;
             return filterResult;
         }
 
         String constraintString = constraint.toString().toUpperCase();
 
-        for (int i = 0; i < mDataFullList.size(); i++){
+        for (int i = 0; i < mPokemonLoader.PokemonList.size(); i++){
 
-            if(mDataFullList.get(i).getName().toUpperCase().contains(constraintString)){
-                filteredList.add(mDataFullList.get(i));
+            if(mPokemonLoader.PokemonList.get(i).getName().toUpperCase().contains(constraintString)){
+                filteredList.add(mPokemonLoader.PokemonList.get(i));
             }
         }
 

@@ -20,8 +20,6 @@ import com.stormwitziers.pokedex.PokemonList.PokemonAdapter;
 import com.stormwitziers.pokedex.PokemonList.PokemonLoader;
 import com.stormwitziers.pokedex.R;
 
-import java.util.ArrayList;
-
 
 public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokemonListener, PokemonLoader.IPokemonLoaderHandler {
     private PokemonLoader mPokemonLoader;
@@ -34,6 +32,9 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        mPokemonLoader = new PokemonLoader(getContext(), this);
+        mPokemonLoader.loadPokemons();
     }
 
     @Nullable
@@ -43,32 +44,12 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
 
         View view = inflater.inflate(R.layout.overview_fragment, container, false);
         addPokemonsToRecycleView(view);
+
         return view;
     }
 
     private void addPokemonsToRecycleView(View view){
-        mPokemonLoader = new PokemonLoader(getContext(), this);
-        mPokemonLoader.loadPokemon(1);
-        mPokemonLoader.loadPokemon(2);
-        mPokemonLoader.loadPokemon(3);
-        mPokemonLoader.loadPokemon(4);
-        mPokemonLoader.loadPokemon(5);
-        mPokemonLoader.loadPokemon(6);
-        mPokemonLoader.loadPokemon(7);
-        mPokemonLoader.loadPokemon(8);
-        mPokemonLoader.loadPokemon(9);
-        mPokemonLoader.loadPokemon(10);
-        mPokemonLoader.loadPokemon(11);
-        mPokemonLoader.loadPokemon(11);
-        mPokemonLoader.loadPokemon(11);
-        mPokemonLoader.loadPokemon(11);
-        mPokemonLoader.loadPokemon(211);
-        mPokemonLoader.loadPokemon(131);
-        mPokemonLoader.loadPokemon(111);
-        mPokemonLoader.loadPokemon(121);
-        mPokemonLoader.loadPokemon(311);
-
-        mAdapter = new PokemonAdapter(mPokemonLoader.PokemonMap, this);
+        mAdapter = new PokemonAdapter(mPokemonLoader, this);
 
 
         mPokemonRecycleView = view.findViewById(R.id.pokemon_recycle_view);

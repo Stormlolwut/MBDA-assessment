@@ -23,18 +23,21 @@ import java.util.ArrayList;
 public class PokemonLoader {
     public interface IPokemonLoaderHandler {
         void PokemonLoaded(int pokemonPosition);
+
         void PokemonUpdated(int pokemonPosition);
     }
 
+    private static final String API_URL_POKEMON_SPECIES = "https://pokeapi.co/api/v2/pokemon-species/";
     private static final String API_URL_POKEMON = "https://pokeapi.co/api/v2/pokemon/";
     private static final String API_URL_POKEMON_FORM = "https://pokeapi.co/api/v2/pokemon-form/";
 
     private RequestQueue mRequestQueue;
     private Context mContext;
 
+
     private IPokemonLoaderHandler mHandler;
 
-    public ArrayList<Pokemon> PokemonMap;
+    public ArrayList<Pokemon> PokemonList;
 
     public PokemonLoader(Context context, IPokemonLoaderHandler handler) {
         mHandler = handler;
@@ -43,44 +46,54 @@ public class PokemonLoader {
         mRequestQueue = Volley.newRequestQueue(context);
         mRequestQueue.start();
 
-        PokemonMap = new ArrayList<Pokemon>();
+        PokemonList = new ArrayList<Pokemon>();
     }
 
-
-    public Pokemon[] loadPokemons(int offset, int amount) {
-
-        // TODO
-        return null;
-    }
-
-    public Pokemon getPokemon(int pokemonId) {
-        return PokemonMap.get(pokemonId);
-    }
-
-    public void loadPokemon(final int id) {
+    public void loadPokemons() {
         // Pokemon information
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, API_URL_POKEMON_FORM + id, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, API_URL_POKEMON_FORM, null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONObject response)
-                    {
+                    public void onResponse(JSONObject response) {
                         try {
-                            Pokemon pokemon = new Pokemon(PokemonMap.size(), response.getString("name"));
+                            for (int i = 1; i <= response.getInt("count"); i++) {
+                                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, API_URL_POKEMON_FORM + i, null,
+                                        new Response.Listener<JSONObject>() {
+                                            @Override
+                                            public void onResponse(JSONObject response) {
+                                                try {
+                                                    Pokemon pokemon = new Pokemon(PokemonList.size(), response.getString("name"));
 
-                            loadPokemonBitMap(pokemon, response.getJSONObject("sprites").getString("front_default"));
+                                                    loadPokemonBitMap(pokemon, response.getJSONObject("sprites").getString("front_default"));
 
-                            PokemonMap.add(pokemon);
-                            mHandler.PokemonLoaded(pokemon.getPosition());
+                                                    PokemonList.add(pokemon);
+                                                    mHandler.PokemonLoaded(pokemon.getPosition());
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+
+                                            }
+                                        });
+                                mRequestQueue.add(jsonObjectRequest);
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                }, new Response.ErrorListener() {
+                },
+                new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
                     }
                 });
+
 
         mRequestQueue.add(jsonObjectRequest);
     }

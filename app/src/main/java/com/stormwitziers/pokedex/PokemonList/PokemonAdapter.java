@@ -20,13 +20,17 @@ import java.util.ArrayList;
 public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> implements Filterable {
 
     private ArrayList<Pokemon> mData;
-    private ArrayList<Pokemon> mFullData;
+    private PokemonLoader mPokemonLoader;
     private OnPokemonListener mOnPokemonListener;
 
-    public PokemonAdapter(ArrayList<Pokemon> pokemons, OnPokemonListener onPokemonListener){
-        this.mData = pokemons;
-        this.mFullData = mData;
+    private PokemonSearchFilter mPokemonSreachFilter;
+
+    public PokemonAdapter(PokemonLoader pokemonLoader, OnPokemonListener onPokemonListener) {
+        this.mPokemonLoader = pokemonLoader;
+        this.mData = pokemonLoader.PokemonList;
         this.mOnPokemonListener = onPokemonListener;
+
+        this.mPokemonSreachFilter = new PokemonSearchFilter(this, mPokemonLoader);
     }
 
     @Override
@@ -34,13 +38,15 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> impl
         return mData.size();
     }
 
-    public void setPokemonArrayList(ArrayList<Pokemon> pokemons){
+    public void setPokemonArrayList(ArrayList<Pokemon> pokemons) {
         mData = pokemons;
         notifyDataSetChanged();
     }
 
-    public Pokemon getItemAtPosition(int position){
-        if(position < 0 || position > mData.size()) { throw new ArrayIndexOutOfBoundsException(); }
+    public Pokemon getItemAtPosition(int position) {
+        if (position < 0 || position > mData.size()) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
 
         return mData.get(position);
     }
@@ -48,7 +54,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> impl
     @NonNull
     @Override
     public PokemonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ConstraintLayout pokemonItem = (ConstraintLayout)LayoutInflater.from(parent.getContext()).inflate(R.layout.pokemon_item, parent, false);
+        ConstraintLayout pokemonItem = (ConstraintLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.pokemon_item, parent, false);
         return new PokemonViewHolder(pokemonItem, mOnPokemonListener);
     }
 
@@ -61,11 +67,13 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> impl
 
     @Override
     public Filter getFilter() {
-        return new PokemonSearchFilter(this, mFullData);
+
+
+        return mPokemonSreachFilter;
     }
 
 
-    public interface OnPokemonListener{
+    public interface OnPokemonListener {
         void onPokemonClick(int position);
     }
 }
