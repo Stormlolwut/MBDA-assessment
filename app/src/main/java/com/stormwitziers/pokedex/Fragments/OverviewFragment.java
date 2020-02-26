@@ -41,9 +41,9 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mOnPokemonSelected = (OnPokemonSelected) getActivity();
-
         View view = inflater.inflate(R.layout.overview_fragment, container, false);
         addPokemonsToRecycleView(view);
+
 
         return view;
     }

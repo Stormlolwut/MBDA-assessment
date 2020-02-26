@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.stormwitziers.pokedex.Pokemon;
 import com.stormwitziers.pokedex.R;
@@ -34,8 +35,6 @@ public class DetailFragment extends Fragment  {
 
     private OverviewFragment.OnPokemonSelected mOnPokemonSelected;
 
-
-
     public DetailFragment(Pokemon pokemon, ArrayList<Pokemon> favoriteList){
         mFavoriteList = favoriteList;
         this.mCurrentPokemon = pokemon;
@@ -48,16 +47,31 @@ public class DetailFragment extends Fragment  {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
+
         mOnPokemonSelected = (OverviewFragment.OnPokemonSelected) getActivity();
+
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View currentView = inflater.inflate(R.layout.detail_fragment, container, false);
+        final View currentView = inflater.inflate(R.layout.detail_fragment, container, false);
 
         if(mCurrentPokemon != null){
             setPokemon(currentView, mCurrentPokemon);
         }
+
+
+        final SwipeRefreshLayout layout = currentView.findViewById(R.id.detail_refresh_layout);
+        layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ImageView pokeImage = currentView.findViewById(R.id.details_picture);
+
+                pokeImage.setImageDrawable(mCurrentPokemon.getPicture());
+
+                layout.setRefreshing(false);
+            }
+        });
 
         return currentView;
     }

@@ -51,12 +51,13 @@ public class PokemonLoader {
 
     public void loadPokemons() {
         // Pokemon information
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, API_URL_POKEMON_FORM, null,
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, API_URL_POKEMON_SPECIES, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            for (int i = 1; i <= response.getInt("count"); i++) {
+                            int count = response.getInt("count");
+                            for (int i = 1; i <= count; i++) {
                                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, API_URL_POKEMON_FORM + i, null,
                                         new Response.Listener<JSONObject>() {
                                             @Override
