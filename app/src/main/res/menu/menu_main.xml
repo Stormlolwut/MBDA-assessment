@@ -5,6 +5,7 @@
         android:id="@+id/toolbar_favorite"
         android:icon="@android:drawable/btn_star_big_off"
         android:title="Favorite"
+        android:visible="false"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/toolbar_search"
