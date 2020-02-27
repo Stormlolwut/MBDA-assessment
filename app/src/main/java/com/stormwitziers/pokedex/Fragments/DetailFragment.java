@@ -7,11 +7,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,7 +18,9 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.stormwitziers.pokedex.FileWriters.FavoritePokemon;
+import com.stormwitziers.pokedex.MainActivity;
 import com.stormwitziers.pokedex.Pokemon;
+import com.stormwitziers.pokedex.PokemonList.PokemonLoader;
 import com.stormwitziers.pokedex.R;
 import com.stormwitziers.pokedex.RateMyPokemonDialogFragment;
 
@@ -29,23 +28,15 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class DetailFragment extends Fragment  {
-
-    private Spinner mSpinner;
-    private boolean mSpinnerFirstCall;
-    private ArrayAdapter<String> mSpinnerAdapter;
+    private MainActivity mMainActivity;
 
     private Pokemon mCurrentPokemon;
-    private ArrayList<Pokemon> mFavoriteList;
-
-    private OverviewFragment.OnPokemonSelected mOnPokemonSelected;
 
     private MenuItem favoriteItem = null;
 
-    public DetailFragment(Pokemon pokemon, ArrayList<Pokemon> favoriteList){
-        mFavoriteList = favoriteList;
+    public DetailFragment(MainActivity mainActivity, Pokemon pokemon){
         this.mCurrentPokemon = pokemon;
-        mSpinnerFirstCall = true;
-
+        this.mMainActivity = mainActivity;
     }
 
     @Override
@@ -53,9 +44,6 @@ public class DetailFragment extends Fragment  {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
-
-        mOnPokemonSelected = (OverviewFragment.OnPokemonSelected) getActivity();
-
     }
 
     @Override
@@ -123,7 +111,8 @@ public class DetailFragment extends Fragment  {
         if (mCurrentPokemon == null) return false;
 
         boolean contains = false;
-        for (Pokemon pokemon : mFavoriteList){
+        ArrayList<Pokemon> favoriteList = PokemonLoader.getInstance().FavoriteList;
+        for (Pokemon pokemon : favoriteList){
             if(pokemon.getName().equals(mCurrentPokemon.getName())){
                 contains = true;
                 break;
@@ -131,9 +120,9 @@ public class DetailFragment extends Fragment  {
         }
 
         if(!contains){
-            initializeSpinner();
-            mFavoriteList.add(mCurrentPokemon);
-            mSpinnerAdapter.add(mCurrentPokemon.getName());
+            mMainActivity.initializeSpinner();
+            favoriteList.add(mCurrentPokemon);
+            mMainActivity.SpinnerAdapter.add(mCurrentPokemon.getName());
 
             FavoritePokemon favoritePokemon = new FavoritePokemon(getContext(), mCurrentPokemon);
             favoritePokemon.Save();
@@ -143,36 +132,6 @@ public class DetailFragment extends Fragment  {
         dialogFragment.show(getFragmentManager(), "rating_dialog");
 
         return true;
-    }
-
-    private void initializeSpinner(){
-        ArrayList<String> pokemonNames = new ArrayList<>();
-        for (Pokemon pokemon: mFavoriteList) {
-            pokemonNames.add(pokemon.getName());
-        }
-
-        mSpinner = this.getActivity().findViewById(R.id.toolbar_favorite_spinner);
-        mSpinnerAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, pokemonNames);
-        mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mSpinner.setAdapter(mSpinnerAdapter);
-        mSpinner.setSelection(0, false);
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(!mSpinnerFirstCall){
-                    Pokemon pokemon = mFavoriteList.get(position);
-                    mOnPokemonSelected.onItemSelected(pokemon);
-                }
-
-                mSpinnerFirstCall = false;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     @Override

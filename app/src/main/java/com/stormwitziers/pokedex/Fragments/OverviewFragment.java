@@ -33,7 +33,7 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        mPokemonLoader = new PokemonLoader(getContext(), this);
+        mPokemonLoader = PokemonLoader.getInstance();
         mPokemonLoader.loadPokemons();
     }
 

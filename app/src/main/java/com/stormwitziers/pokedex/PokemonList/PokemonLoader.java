@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.stormwitziers.pokedex.FileWriters.FavoritePokemon;
 import com.stormwitziers.pokedex.Pokemon;
 
 import org.json.JSONException;
@@ -21,6 +22,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class PokemonLoader {
+    private static PokemonLoader instance;
+
+    public static void instantiate(Context context, IPokemonLoaderHandler handler)
+    {
+        if(instance == null)
+        {
+            instance = new PokemonLoader(context, handler);
+        }
+    }
+
+    public static PokemonLoader getInstance() {
+        return instance;
+    }
+
     public interface IPokemonLoaderHandler {
         void PokemonLoaded(int pokemonPosition);
 
@@ -38,8 +53,9 @@ public class PokemonLoader {
     private IPokemonLoaderHandler mHandler;
 
     public ArrayList<Pokemon> PokemonList;
+    public ArrayList<Pokemon> FavoriteList;
 
-    public PokemonLoader(Context context, IPokemonLoaderHandler handler) {
+    private PokemonLoader(Context context, IPokemonLoaderHandler handler) {
         mHandler = handler;
         mContext = context;
 
@@ -47,6 +63,7 @@ public class PokemonLoader {
         mRequestQueue.start();
 
         PokemonList = new ArrayList<Pokemon>();
+        FavoriteList = FavoritePokemon.LoadAllPokemons(context);
     }
 
     public void loadPokemons() {
