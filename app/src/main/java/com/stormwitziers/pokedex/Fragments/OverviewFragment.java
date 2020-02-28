@@ -53,12 +53,19 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
 
 
         mPokemonRecycleView = view.findViewById(R.id.pokemon_recycle_view);
-        mPokemonRecycleView.setHasFixedSize(true);
+        //mPokemonRecycleView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         mPokemonRecycleView.setLayoutManager(layoutManager);
 
         mPokemonRecycleView.setAdapter(mAdapter);
+        mAdapter.addPokemons(mPokemonLoader.loadCustomPokemons());
+    }
+
+    public void onResume() {
+
+        super.onResume();
+        mAdapter.addPokemons(mPokemonLoader.loadCustomPokemons());
     }
 
     @Override

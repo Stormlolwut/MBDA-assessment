@@ -64,14 +64,27 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> impl
         ((ImageView) holder.pokemonItem.getChildAt(0)).setImageDrawable(pokemon.getPicture());
         ((TextView) holder.pokemonItem.getChildAt(1)).setText(pokemon.getName());
     }
+    //TODO fix dit 
+    public void addPokemons(ArrayList<Pokemon> pokemons){
+        for(int i = 0; i < mData.size(); i++){
+            for(int j = 0; j < pokemons.size(); j++){
+                Pokemon newPokemon = pokemons.get(j);
+                if(!mData.get(i).equals(newPokemon)){
+                    mData.add(newPokemon);
+                } else{
+                    break;
+                }
+            }
+
+        }
+
+        notifyDataSetChanged();
+    }
 
     @Override
     public Filter getFilter() {
-
-
         return mPokemonSearchFilter;
     }
-
 
     public interface OnPokemonListener {
         void onPokemonClick(int position);

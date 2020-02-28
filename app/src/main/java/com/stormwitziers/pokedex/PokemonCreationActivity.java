@@ -57,10 +57,12 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         Spinner type = findViewById(R.id.pokemon_creation_spinner);
         ImageButton image = findViewById(R.id.pokemon_creation_profile_picture);
 
+        PokemonLoader loader = PokemonLoader.getInstance();
+
         if(TextUtils.isEmpty(name.getText())) {
             name.setError("Please fill in a name for your pokemon!");
             return;
-        }else if(!PokemonLoader.getInstance().isNameUnique(name.getText().toString())){
+        }else if(!loader.isNameUnique(name.getText().toString())){
             name.setError("That name is already taken please us an other!");
             return;
         }
@@ -74,6 +76,7 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         Writer writer = new Writer(this, pokemon);
         writer.Save();
 
+        loader.CustomPokemonList.add(pokemon);
         this.finish();
     }
 

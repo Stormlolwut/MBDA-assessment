@@ -56,6 +56,7 @@ public class PokemonLoader {
 
     public ArrayList<Pokemon> PokemonList;
     public ArrayList<Pokemon> FavoriteList;
+    public ArrayList<Pokemon> CustomPokemonList;
 
     private PokemonLoader(Context context, IPokemonLoaderHandler handler) {
         mHandler = handler;
@@ -66,6 +67,7 @@ public class PokemonLoader {
 
         PokemonList = new ArrayList<Pokemon>();
         FavoriteList = new ArrayList<Pokemon>();
+        CustomPokemonList = new ArrayList<Pokemon>();
     }
 
     public boolean isNameUnique(final String name){
@@ -127,6 +129,10 @@ public class PokemonLoader {
                 });
 
         mRequestQueue.add(jsonObjectRequest);
+    }
+
+    public ArrayList<Pokemon> loadCustomPokemons(){
+       return CustomPokemonList = Writer.LoadAllPokemons(this.mContext);
     }
 
     private void loadPokemonBitMap(final Pokemon pokemon, String url) {
