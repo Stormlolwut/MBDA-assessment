@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">Pokedex</string>
+    <string-array name="string_pokemon_type_array">
+        <item>Normal</item>
+        <item>Fire</item>
+        <item>Fighting</item>
+        <item>Water</item>
+        <item>Flying</item>
+        <item>Grass</item>
+        <item>Poison</item>
+        <item>Electric</item>
+        <item>Ground</item>
+        <item>Psychic</item>
+        <item>Rock</item>
+        <item>Ice</item>
+        <item>Bug</item>
+        <item>Dragon</item>
+        <item>Ghost</item>
+        <item>Dark</item>
+        <item>Steel</item>
+        <item>Fairy</item>
+        <item>'???'</item>S
+    </string-array>
 </resources>

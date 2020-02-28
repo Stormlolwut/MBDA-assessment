@@ -48,7 +48,6 @@ public class PokemonLoader {
     private RequestQueue mRequestQueue;
     private Context mContext;
 
-
     private IPokemonLoaderHandler mHandler;
 
     public ArrayList<Pokemon> PokemonList;
@@ -110,7 +109,6 @@ public class PokemonLoader {
 
                     }
                 });
-
 
         mRequestQueue.add(jsonObjectRequest);
     }
