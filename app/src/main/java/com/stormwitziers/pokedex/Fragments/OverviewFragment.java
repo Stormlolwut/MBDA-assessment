@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.stormwitziers.pokedex.MainActivity;
 import com.stormwitziers.pokedex.Pokemon;
 import com.stormwitziers.pokedex.PokemonList.PokemonAdapter;
 import com.stormwitziers.pokedex.PokemonList.PokemonLoader;
@@ -27,6 +28,12 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
     private PokemonAdapter mAdapter;
 
     private OnPokemonSelected mOnPokemonSelected;
+    private MainActivity mMainActivity;
+
+    public OverviewFragment(MainActivity mainActivity)
+    {
+        this.mMainActivity = mainActivity;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +106,11 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
     @Override
     public void PokemonLoaded(int pokemonPosition) {
         mAdapter.notifyItemInserted(pokemonPosition);
+    }
+
+    @Override
+    public void RefreshFavorites() {
+        mMainActivity.initializeSpinner();
     }
 
     @Override

@@ -28,7 +28,6 @@ public class RateMyPokemonDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
-
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

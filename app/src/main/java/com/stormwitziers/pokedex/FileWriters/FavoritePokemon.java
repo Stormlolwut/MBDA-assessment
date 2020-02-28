@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class FavoritePokemon  {
     private static final String FAVORITE = "Favorite";
     private static final String FILE_NAME = "Favorites";
-    private static final String OBJECT_NAME = "favorites";
+    private static final String OBJECT_NAME = "favorite";
 
     private final Pokemon mPokemon;
     private final File mParent;
@@ -84,7 +84,7 @@ public class FavoritePokemon  {
             for (int i = 0; i < jsonArray.length(); i++)
             {
                 String name = jsonArray.getString(i);
-                if(name == mPokemon.getName())
+                if(name.equals(mPokemon.getName()))
                 {
                     jsonArray.remove(i);
                     break;
