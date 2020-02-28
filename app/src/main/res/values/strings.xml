@@ -19,6 +19,10 @@
         <item>Dark</item>
         <item>Steel</item>
         <item>Fairy</item>
+<<<<<<< HEAD
         <item>\'???\'</item>
+=======
+        <item>\?\?\?</item>S
+>>>>>>> development
     </string-array>
 </resources>

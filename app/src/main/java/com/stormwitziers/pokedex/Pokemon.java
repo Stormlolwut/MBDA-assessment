@@ -8,11 +8,21 @@ import java.io.Serializable;
 public class Pokemon implements Serializable {
 
     private int position;
+
     private String name;
     private Drawable picture;
+    private String type;
+
     private float rating;
+<<<<<<< HEAD
     
+=======
+
+
+>>>>>>> development
     public int getPosition() { return position; }
+
+    public String getType() { return type; }
 
     public String getName(){ return name; }
 
@@ -24,7 +34,15 @@ public class Pokemon implements Serializable {
 
     public float getRating(){ return rating; }
 
+<<<<<<< HEAD
 
+=======
+    public Pokemon(String name, Drawable picture, String type){
+        this.name = name;
+        this.picture = picture;
+        this.type = type;
+    }
+>>>>>>> development
 
     public Pokemon(String name, Drawable picture){
         this.name = name;
