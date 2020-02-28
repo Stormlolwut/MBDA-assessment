@@ -14,6 +14,7 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.stormwitziers.pokedex.FileWriters.FavoritePokemon;
+import com.stormwitziers.pokedex.FileWriters.Writer;
 import com.stormwitziers.pokedex.Pokemon;
 
 import org.json.JSONException;
@@ -63,7 +64,7 @@ public class PokemonLoader {
         mRequestQueue.start();
 
         PokemonList = new ArrayList<Pokemon>();
-        FavoriteList = FavoritePokemon.LoadAllPokemons(context);
+        FavoriteList = FavoritePokemon.LoadAllPokemons(context, Writer.FAVORITE);
     }
 
     public void loadPokemons() {
