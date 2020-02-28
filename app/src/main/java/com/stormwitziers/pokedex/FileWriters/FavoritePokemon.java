@@ -66,7 +66,36 @@ public class FavoritePokemon  {
 
     public void Delete()
     {
-        throw new UnsupportedOperationException();
+        File favoriteFile = new File(mParent, FILE_NAME + ".json");
+        if(!favoriteFile.exists())
+        {
+            return;
+        }
+
+        try {
+            BufferedReader fileReader = new BufferedReader(new FileReader(favoriteFile.getAbsolutePath()));
+
+            // READ
+            String content = fileReader.readLine();
+            JSONObject pokemonJson = new JSONObject(content);
+
+            // WRITE
+            JSONArray jsonArray = new JSONArray(pokemonJson.getString(OBJECT_NAME));
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                String name = jsonArray.getString(i);
+                if(name == mPokemon.getName())
+                {
+                    jsonArray.remove(i);
+                    break;
+                }
+            }
+
+            pokemonJson.put(OBJECT_NAME, jsonArray);
+            AddFavoriteArray(favoriteFile, pokemonJson);
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public static ArrayList<String> LoadAllFavorites(Context context)

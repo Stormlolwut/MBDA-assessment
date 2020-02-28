@@ -33,6 +33,7 @@ public class DetailFragment extends Fragment  {
     private Pokemon mCurrentPokemon;
 
     private MenuItem favoriteItem = null;
+    private RatingBar ratingBar;
 
     public DetailFragment(MainActivity mainActivity, Pokemon pokemon){
         this.mCurrentPokemon = pokemon;
@@ -100,7 +101,7 @@ public class DetailFragment extends Fragment  {
 
         TextView pokeName = currentView.findViewById(R.id.details_name);
         ImageView pokeImage = currentView.findViewById(R.id.details_picture);
-        RatingBar ratingBar = currentView.findViewById(R.id.details_ratingbar);
+        ratingBar = currentView.findViewById(R.id.details_ratingbar);
 
         pokeName.setText(pokemon.getName());
         pokeImage.setImageDrawable(pokemon.getPicture());
@@ -142,6 +143,8 @@ public class DetailFragment extends Fragment  {
 
             favoritePokemon.Delete();
             mCurrentPokemon.isFavorite(false);
+            mCurrentPokemon.setRating(0);
+            ratingBar.setRating(0);
             SetFavIconOn(false);
         }
 
