@@ -84,7 +84,7 @@ public class FavoritePokemon  {
             for (int i = 0; i < jsonArray.length(); i++)
             {
                 String name = jsonArray.getString(i);
-                if(name == mPokemon.getName())
+                if(name.equals(mPokemon.getName()))
                 {
                     jsonArray.remove(i);
                     break;
