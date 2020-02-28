@@ -116,8 +116,6 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
     // TODO: Maybe own class "FavoritePokemon"?
     public void initializeSpinner() {
-
-
         ArrayList<String> pokemonNames = new ArrayList<>();
         for (Pokemon pokemon : PokemonLoader.getInstance().FavoriteList) {
             pokemonNames.add(pokemon.getName());

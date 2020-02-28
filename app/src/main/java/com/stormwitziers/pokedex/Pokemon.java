@@ -11,7 +11,7 @@ public class Pokemon implements Serializable {
     private String name;
     private Drawable picture;
     private float rating;
-
+    
     public int getPosition() { return position; }
 
     public String getName(){ return name; }
@@ -23,6 +23,8 @@ public class Pokemon implements Serializable {
     public void setRating(float rating) { this.rating = rating; }
 
     public float getRating(){ return rating; }
+
+
 
     public Pokemon(String name, Drawable picture){
         this.name = name;
