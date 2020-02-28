@@ -23,14 +23,14 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> impl
     private PokemonLoader mPokemonLoader;
     private OnPokemonListener mOnPokemonListener;
 
-    private PokemonSearchFilter mPokemonSreachFilter;
+    private PokemonSearchFilter mPokemonSearchFilter;
 
     public PokemonAdapter(PokemonLoader pokemonLoader, OnPokemonListener onPokemonListener) {
         this.mPokemonLoader = pokemonLoader;
         this.mData = pokemonLoader.PokemonList;
         this.mOnPokemonListener = onPokemonListener;
 
-        this.mPokemonSreachFilter = new PokemonSearchFilter(this, mPokemonLoader);
+        this.mPokemonSearchFilter = new PokemonSearchFilter(this, mPokemonLoader);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> impl
     public Filter getFilter() {
 
 
-        return mPokemonSreachFilter;
+        return mPokemonSearchFilter;
     }
 
 

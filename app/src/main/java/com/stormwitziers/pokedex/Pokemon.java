@@ -8,13 +8,10 @@ import java.io.Serializable;
 public class Pokemon implements Serializable {
 
     private int position;
-
     private String name;
     private Drawable picture;
     private String type;
-
     private float rating;
-
 
     public int getPosition() { return position; }
 
@@ -35,12 +32,6 @@ public class Pokemon implements Serializable {
         this.picture = picture;
         this.type = type;
     }
-
-    public Pokemon(String name, Drawable picture){
-        this.name = name;
-        this.picture = picture;
-    }
-
     public Pokemon(int position, String name)
     {
         this.name = name;

@@ -61,11 +61,11 @@ public class PokemonLoader {
         mRequestQueue.start();
 
         PokemonList = new ArrayList<Pokemon>();
-        FavoriteList = FavoritePokemon.LoadAllPokemons(context, Writer.FAVORITE);
     }
 
     public void loadPokemons() {
-        // Pokemon information
+        ArrayList<String> favoriteNames = FavoritePokemon.LoadAllFavorites(mContext);
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, API_URL_POKEMON_SPECIES, null,
                 new Response.Listener<JSONObject>() {
                     @Override

@@ -18,18 +18,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Writer {
-    public static final String FAVORITE = "Favorite";
+    private static final String FOLDER_NAME = "Pokemon";
 
-    private com.stormwitziers.pokedex.Pokemon mPokemon;
+    private final com.stormwitziers.pokedex.Pokemon mPokemon;
+    private final File parent;
 
-    private File parent;
-    private String mParentName;
-
-    public Writer(Context context, com.stormwitziers.pokedex.Pokemon pokemon, String parentName) {
+    public Writer(Context context, com.stormwitziers.pokedex.Pokemon pokemon) {
         this.mPokemon = pokemon;
-        this.mParentName = parentName;
 
-        parent = new File(context.getFilesDir(), mParentName);
+        parent = new File(context.getFilesDir(), FOLDER_NAME);
         if(!parent.exists())
         {
             parent.mkdir();
@@ -58,6 +55,7 @@ public class Writer {
                 obj.put("name", mPokemon.getName());
                 obj.put("rating", mPokemon.getRating());
                 obj.put("picture", fileBitmap.getAbsolutePath());
+                obj.put("type", mPokemon.getType());
                 BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePokemon));
                 bufferedWriter.write(obj.toString());
                 bufferedWriter.close();
@@ -71,9 +69,9 @@ public class Writer {
         throw new UnsupportedOperationException();
     }
 
-    public static ArrayList<com.stormwitziers.pokedex.Pokemon> LoadAllPokemons(Context context, String folderName) {
+    public static ArrayList<com.stormwitziers.pokedex.Pokemon> LoadAllPokemons(Context context) {
         ArrayList<com.stormwitziers.pokedex.Pokemon> pokemons = new ArrayList<>();
-        File parent = new File(context.getFilesDir(), folderName);
+        File parent = new File(context.getFilesDir(), FOLDER_NAME);
         File[] files = parent.listFiles();
 
         if(files == null) files = new File[0];
@@ -95,7 +93,7 @@ public class Writer {
                 JSONObject pokemonJson = new JSONObject(content);
 
                 Drawable drawable = Drawable.createFromPath(pokemonJson.getString("picture"));
-                com.stormwitziers.pokedex.Pokemon pokemon = new com.stormwitziers.pokedex.Pokemon(pokemonJson.getString("name"), drawable);
+                com.stormwitziers.pokedex.Pokemon pokemon = new com.stormwitziers.pokedex.Pokemon(pokemonJson.getString("name"), drawable, pokemonJson.getString("type"));
                 pokemon.setRating((float)pokemonJson.getDouble("rating"));
 
                 pokemons.add(pokemon);
