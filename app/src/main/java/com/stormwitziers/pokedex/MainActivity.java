@@ -146,4 +146,9 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
             }
         });
     }
+
+    public void CreateNewPokemon(View v){
+        Intent pokemonCreation = new Intent(this, com.stormwitziers.pokedex.PokemonCreationActivity.class);
+        startActivity(pokemonCreation);
+    }
 }

@@ -15,7 +15,7 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_pokemon_creation);
 
         Spinner pokemonType = findViewById(R.id.pokemon_creation_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.string_pokemon_type_array, android.R.layout.simple_spinner_item);
