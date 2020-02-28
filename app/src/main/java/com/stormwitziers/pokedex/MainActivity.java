@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         mFragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
-        mOverviewFragment = new OverviewFragment();
+        mOverviewFragment = new OverviewFragment(this);
 
         PokemonLoader.instantiate(this, mOverviewFragment);
 

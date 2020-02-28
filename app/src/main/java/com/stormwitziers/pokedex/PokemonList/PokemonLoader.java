@@ -41,7 +41,7 @@ public class PokemonLoader {
 
     public interface IPokemonLoaderHandler {
         void PokemonLoaded(int pokemonPosition);
-
+        void RefreshFavorites();
         void PokemonUpdated(int pokemonPosition);
     }
 
@@ -74,6 +74,7 @@ public class PokemonLoader {
         return !pokemon.isPresent();
     }
 
+
     public void loadPokemons() {
         final ArrayList<String> favoriteNames = FavoritePokemon.LoadAllFavorites(mContext);
 
@@ -94,6 +95,8 @@ public class PokemonLoader {
                                                     if(favoriteNames != null && favoriteNames.contains(pokemon.getName()))
                                                     {
                                                         FavoriteList.add(pokemon);
+                                                        pokemon.isFavorite(true);
+                                                        mHandler.RefreshFavorites();
                                                     }
 
                                                     loadPokemonBitMap(pokemon, response.getJSONObject("sprites").getString("front_default"));
