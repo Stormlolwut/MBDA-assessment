@@ -56,6 +56,7 @@ public class Writer {
                 obj.put("rating", mPokemon.getRating());
                 obj.put("picture", fileBitmap.getAbsolutePath());
                 obj.put("type", mPokemon.getType());
+                obj.put("favorite", mPokemon.isFavorite());
                 BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePokemon));
                 bufferedWriter.write(obj.toString());
                 bufferedWriter.close();
@@ -92,9 +93,11 @@ public class Writer {
 
                 JSONObject pokemonJson = new JSONObject(content);
 
+                // Pokemon properties.
                 Drawable drawable = Drawable.createFromPath(pokemonJson.getString("picture"));
                 com.stormwitziers.pokedex.Pokemon pokemon = new com.stormwitziers.pokedex.Pokemon(pokemonJson.getString("name"), drawable, pokemonJson.getString("type"));
                 pokemon.setRating((float)pokemonJson.getDouble("rating"));
+                pokemon.isFavorite(pokemonJson.getBoolean("favorite"));
 
                 pokemons.add(pokemon);
             } catch (IOException | JSONException e) {

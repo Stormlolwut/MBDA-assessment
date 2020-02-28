@@ -82,7 +82,8 @@ public class DetailFragment extends Fragment  {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbar_favorite:
-                return favoriteCurrentPokemon();
+                if (mCurrentPokemon == null) return false;
+                return setFavoriteCurrentPokemon(!mCurrentPokemon.isFavorite());
             default:
                 return false;
         }
@@ -107,29 +108,42 @@ public class DetailFragment extends Fragment  {
         ratingBar.setRating(pokemon.getRating());
     }
 
-    private boolean favoriteCurrentPokemon() {
-        if (mCurrentPokemon == null) return false;
-
-        boolean contains = false;
+    private boolean setFavoriteCurrentPokemon(boolean setFavorite) {
+        FavoritePokemon favoritePokemon = new FavoritePokemon(getContext(), mCurrentPokemon);
         ArrayList<Pokemon> favoriteList = PokemonLoader.getInstance().FavoriteList;
-        for (Pokemon pokemon : favoriteList){
-            if(pokemon.getName().equals(mCurrentPokemon.getName())){
-                contains = true;
-                break;
+
+        if(setFavorite)
+        {
+            boolean contains = false;
+            for (Pokemon pokemon : favoriteList){
+                if(pokemon.getName().equals(mCurrentPokemon.getName())){
+                    contains = true;
+                    break;
+                }
             }
-        }
 
-        if(!contains){
+            if(!contains){
+                favoriteList.add(mCurrentPokemon);
+                mMainActivity.initializeSpinner();
+
+
+                favoritePokemon.Save();
+                mCurrentPokemon.isFavorite(true);
+                SetFavIconOn(true);
+            }
+
+            RateMyPokemonDialogFragment dialogFragment = new RateMyPokemonDialogFragment();
+            dialogFragment.show(getFragmentManager(), "rating_dialog");
+        }
+        else
+        {
+            favoriteList.remove(mCurrentPokemon);
             mMainActivity.initializeSpinner();
-            favoriteList.add(mCurrentPokemon);
-            mMainActivity.SpinnerAdapter.add(mCurrentPokemon.getName());
 
-            FavoritePokemon favoritePokemon = new FavoritePokemon(getContext(), mCurrentPokemon);
-            favoritePokemon.Save();
+            favoritePokemon.Delete();
+            mCurrentPokemon.isFavorite(false);
+            SetFavIconOn(false);
         }
-
-        RateMyPokemonDialogFragment dialogFragment = new RateMyPokemonDialogFragment();
-        dialogFragment.show(getFragmentManager(), "rating_dialog");
 
         return true;
     }
@@ -139,5 +153,19 @@ public class DetailFragment extends Fragment  {
         super.onCreateOptionsMenu(menu, inflater);
         favoriteItem = menu.findItem(R.id.toolbar_favorite);
         favoriteItem.setVisible(true);
+
+        SetFavIconOn(mCurrentPokemon.isFavorite());
+    }
+
+    private void SetFavIconOn(boolean value)
+    {
+        if(value)
+        {
+            favoriteItem.setIcon(android.R.drawable.star_big_on);
+        }
+        else
+        {
+            favoriteItem.setIcon(android.R.drawable.star_big_off);
+        }
     }
 }
