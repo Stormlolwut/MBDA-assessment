@@ -64,9 +64,9 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> impl
         ((ImageView) holder.pokemonItem.getChildAt(0)).setImageDrawable(pokemon.getPicture());
         ((TextView) holder.pokemonItem.getChildAt(1)).setText(pokemon.getName());
     }
-    //TODO fix dit 
+    //TODO fix dit hij moet alleen de pokemons toevoegen die nog neit in de mdata staan anders staan ze dubbel
     public void addPokemons(ArrayList<Pokemon> pokemons){
-        for(int i = 0; i < mData.size(); i++){
+        /*for(int i = 0; i < mData.size(); i++){
             for(int j = 0; j < pokemons.size(); j++){
                 Pokemon newPokemon = pokemons.get(j);
                 if(!mData.get(i).equals(newPokemon)){
@@ -77,7 +77,7 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> impl
             }
 
         }
-
+        */
         notifyDataSetChanged();
     }
 
