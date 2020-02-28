@@ -61,10 +61,11 @@ public class PokemonLoader {
         mRequestQueue.start();
 
         PokemonList = new ArrayList<Pokemon>();
+        FavoriteList = new ArrayList<Pokemon>();
     }
 
     public void loadPokemons() {
-        ArrayList<String> favoriteNames = FavoritePokemon.LoadAllFavorites(mContext);
+        final ArrayList<String> favoriteNames = FavoritePokemon.LoadAllFavorites(mContext);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, API_URL_POKEMON_SPECIES, null,
                 new Response.Listener<JSONObject>() {
@@ -79,6 +80,11 @@ public class PokemonLoader {
                                             public void onResponse(JSONObject response) {
                                                 try {
                                                     Pokemon pokemon = new Pokemon(PokemonList.size(), response.getString("name"));
+
+                                                    if(favoriteNames != null && favoriteNames.contains(pokemon.getName()))
+                                                    {
+                                                        FavoriteList.add(pokemon);
+                                                    }
 
                                                     loadPokemonBitMap(pokemon, response.getJSONObject("sprites").getString("front_default"));
 
