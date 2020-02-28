@@ -117,10 +117,13 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     // TODO: Maybe own class "FavoritePokemon"?
     public void initializeSpinner() {
         ArrayList<String> pokemonNames = new ArrayList<>();
-        for (Pokemon pokemon : PokemonLoader.getInstance().FavoriteList) {
-            pokemonNames.add(pokemon.getName());
+        if(PokemonLoader.getInstance().FavoriteList != null)
+        {
+            for (Pokemon pokemon : PokemonLoader.getInstance().FavoriteList) {
+                pokemonNames.add(pokemon.getName());
+            }
         }
-
+        
         mSpinner = findViewById(R.id.toolbar_favorite_spinner);
         SpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, pokemonNames);
         SpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

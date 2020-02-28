@@ -33,13 +33,13 @@ public class PokemonService extends Service {
     public void onCreate(){
 
         mPokemonArray = new Pokemon[] {
-                new Pokemon("Bulbasaur", getResources().getDrawable(R.drawable.pokemon_bulbasaur)),
-                new Pokemon("Dragonite", getResources().getDrawable(R.drawable.pokemon_dragonite)),
-                new Pokemon("Pikachu", getResources().getDrawable(R.drawable.pokemon_pikachu)),
-                new Pokemon("Sonja", getResources().getDrawable(R.drawable.pokemon_pikachu)),
-                new Pokemon("André", getResources().getDrawable(R.drawable.pokemon_pikachu)),
-                new Pokemon("Huseyin", getResources().getDrawable(R.drawable.pokemon_pikachu)),
-                new Pokemon("Hakan", getResources().getDrawable(R.drawable.pokemon_peach)),
+                new Pokemon("Bulbasaur", getResources().getDrawable(R.drawable.pokemon_bulbasaur), "wow"),
+                new Pokemon("Dragonite", getResources().getDrawable(R.drawable.pokemon_dragonite), "wow"),
+                new Pokemon("Pikachu", getResources().getDrawable(R.drawable.pokemon_pikachu), "wow"),
+                new Pokemon("Sonja", getResources().getDrawable(R.drawable.pokemon_pikachu), "wow"),
+                new Pokemon("André", getResources().getDrawable(R.drawable.pokemon_pikachu), "wow"),
+                new Pokemon("Huseyin", getResources().getDrawable(R.drawable.pokemon_pikachu), "wow"),
+                new Pokemon("Hakan", getResources().getDrawable(R.drawable.pokemon_peach), "wow"),
         };
 
         startForeground(POKEMON_NOTIFICATION, getNotification());
