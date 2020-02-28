@@ -25,10 +25,8 @@ import java.util.ArrayList;
 public class PokemonLoader {
     private static PokemonLoader instance;
 
-    public static void instantiate(Context context, IPokemonLoaderHandler handler)
-    {
-        if(instance == null)
-        {
+    public static void instantiate(Context context, IPokemonLoaderHandler handler) {
+        if (instance == null) {
             instance = new PokemonLoader(context, handler);
         }
     }
@@ -118,31 +116,38 @@ public class PokemonLoader {
     }
 
     private void loadPokemonBitMap(final Pokemon pokemon, String url) {
-        ImageRequest imageRequest = new ImageRequest(
-                url,
-                new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap response) {
-                        int position = pokemon.getPosition();
-                        Drawable d = new BitmapDrawable(mContext.getResources(), response);
-                        pokemon.setPicture(d);
+        if (url != null & !url.isEmpty()) {
+            ImageRequest imageRequest = new ImageRequest(
+                    url,
+                    new Response.Listener<Bitmap>() {
+                        @Override
+                        public void onResponse(Bitmap response) {
+                            int position = pokemon.getPosition();
+                            Drawable d = new BitmapDrawable(mContext.getResources(), response);
+                            pokemon.setPicture(d);
 
 
-                        mHandler.PokemonUpdated(position);
+                            mHandler.PokemonUpdated(position);
+                        }
+                    },
+                    0,
+                    0,
+                    ImageView.ScaleType.CENTER_CROP,
+                    Bitmap.Config.RGB_565,
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
                     }
-                },
-                0,
-                0,
-                ImageView.ScaleType.CENTER_CROP,
-                Bitmap.Config.RGB_565,
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
+            ) {
+                @Override
+                public Priority getPriority() {
+                    return Priority.HIGH;
                 }
-        );
+            };
 
-        mRequestQueue.add(imageRequest);
+            mRequestQueue.add(imageRequest);
+        }
     }
 }
