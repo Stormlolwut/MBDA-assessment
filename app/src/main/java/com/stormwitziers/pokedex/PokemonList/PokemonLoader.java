@@ -4,7 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.widget.ImageView;
+
+import androidx.annotation.RequiresApi;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class PokemonLoader {
     private static PokemonLoader instance;
@@ -62,6 +66,12 @@ public class PokemonLoader {
 
         PokemonList = new ArrayList<Pokemon>();
         FavoriteList = new ArrayList<Pokemon>();
+    }
+
+    public boolean isNameUnique(final String name){
+
+        Optional<Pokemon> pokemon = PokemonList.stream().filter(p -> p.getName().equals(name.toLowerCase())).findFirst();
+        return !pokemon.isPresent();
     }
 
     public void loadPokemons() {

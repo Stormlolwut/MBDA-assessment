@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
         Toolbar toolBar = findViewById(R.id.toolbar);
         setSupportActionBar(toolBar);
+
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
 
