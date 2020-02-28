@@ -19,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 import com.stormwitziers.pokedex.FileWriters.FavoritePokemon;
 import com.stormwitziers.pokedex.FileWriters.WebserviceFavoriteValues;
 import com.stormwitziers.pokedex.FileWriters.Writer;
+import com.stormwitziers.pokedex.Fragments.OverviewFragment;
 import com.stormwitziers.pokedex.Pokemon;
 
 import org.json.JSONException;
@@ -28,18 +29,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class PokemonLoader {
-    private static PokemonLoader instance;
-
-    public static void instantiate(Context context, IPokemonLoaderHandler handler) {
-        if (instance == null) {
-            instance = new PokemonLoader(context, handler);
-        }
-    }
-
-    public static PokemonLoader getInstance() {
-        return instance;
-    }
-
     public interface IPokemonLoaderHandler {
         void PokemonLoaded(int pokemonPosition);
 
@@ -60,8 +49,7 @@ public class PokemonLoader {
     public ArrayList<Pokemon> PokemonList;
     public ArrayList<Pokemon> FavoriteList;
 
-    private PokemonLoader(Context context, IPokemonLoaderHandler handler) {
-        mHandler = handler;
+    public PokemonLoader(Context context) {
         mContext = context;
 
         mRequestQueue = Volley.newRequestQueue(context);
@@ -69,6 +57,10 @@ public class PokemonLoader {
 
         PokemonList = new ArrayList<Pokemon>();
         FavoriteList = new ArrayList<Pokemon>();
+    }
+
+    public void setHandler(OverviewFragment mOverviewFragment) {
+        mHandler = mOverviewFragment;
     }
 
     public boolean isNameUnique(final String name) {

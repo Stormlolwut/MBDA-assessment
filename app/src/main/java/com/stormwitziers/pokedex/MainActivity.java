@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     private OverviewFragment mOverviewFragment;
     private DetailFragment mDetailFragment;
 
+    private PokemonLoader mPokemonLoader;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,9 +62,9 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         mFragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
-        mOverviewFragment = new OverviewFragment(this);
-
-        PokemonLoader.instantiate(this, mOverviewFragment);
+        mPokemonLoader = new PokemonLoader(this);
+        mOverviewFragment = new OverviewFragment(this, mPokemonLoader);
+        mPokemonLoader.setHandler(mOverviewFragment);
 
         fragmentTransaction.add(R.id.LinearLayout, mOverviewFragment, OVERVIEW_FRAGMENT_TAG);
         fragmentTransaction.commit();
@@ -73,9 +74,8 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         startService(pokemonServiceIntent);
 
         mOnPokemonSelected = this;
-        initializeSpinner();
+        mPokemonLoader.loadPokemons();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -116,9 +116,9 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     public void initializeSpinner() {
         ArrayList<String> pokemonNames = new ArrayList<>();
         pokemonNames.add("Home");
-        if(PokemonLoader.getInstance().FavoriteList != null)
+        if(mPokemonLoader.FavoriteList != null)
         {
-            for (Pokemon pokemon : PokemonLoader.getInstance().FavoriteList) {
+            for (Pokemon pokemon : mPokemonLoader.FavoriteList) {
                 pokemonNames.add(pokemon.getName());
             }
         }
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // position 0 is the name favorites.
                 if(position != 0){
-                    Pokemon pokemon = PokemonLoader.getInstance().FavoriteList.get(position - 1);
+                    Pokemon pokemon = mPokemonLoader.FavoriteList.get(position - 1);
                     mOnPokemonSelected.onItemSelected(pokemon);
                 }
             }
@@ -152,5 +152,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         startActivity(pokemonCreation);
     }
 
-
+    public PokemonLoader getPokemonLoader() {
+        return mPokemonLoader;
+    }
 }

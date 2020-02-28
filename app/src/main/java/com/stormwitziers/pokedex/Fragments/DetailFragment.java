@@ -119,7 +119,7 @@ public class DetailFragment extends Fragment  {
 
     public void setFavoriteCurrentPokemon(boolean setFavorite) {
         FavoritePokemon favoritePokemon = new FavoritePokemon(getContext(), mCurrentPokemon);
-        ArrayList<Pokemon> favoriteList = PokemonLoader.getInstance().FavoriteList;
+        ArrayList<Pokemon> favoriteList = mMainActivity.getPokemonLoader().FavoriteList;
 
         if(setFavorite)
         {

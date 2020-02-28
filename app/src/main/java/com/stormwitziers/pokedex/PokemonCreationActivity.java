@@ -60,7 +60,7 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         if(TextUtils.isEmpty(name.getText())) {
             name.setError("Please fill in a name for your pokemon!");
             return;
-        }else if(!PokemonLoader.getInstance().isNameUnique(name.getText().toString())){
+        }else if(!((MainActivity)getBaseContext()).getPokemonLoader().isNameUnique(name.getText().toString())){
             name.setError("That name is already taken please us an other!");
             return;
         }

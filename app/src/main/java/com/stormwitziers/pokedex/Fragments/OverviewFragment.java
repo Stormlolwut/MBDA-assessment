@@ -30,19 +30,18 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
     private OnPokemonSelected mOnPokemonSelected;
     private MainActivity mMainActivity;
 
-    public OverviewFragment(MainActivity mainActivity)
+    public OverviewFragment(MainActivity mainActivity, PokemonLoader pokemonLoader)
     {
         this.mMainActivity = mainActivity;
+        this.mPokemonLoader = pokemonLoader;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        mPokemonLoader = PokemonLoader.getInstance();
-        mPokemonLoader.loadPokemons();
     }
+
 
     @Nullable
     @Override
