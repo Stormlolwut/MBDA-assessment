@@ -84,7 +84,15 @@ public class DetailFragment extends Fragment  {
         switch (item.getItemId()) {
             case R.id.toolbar_favorite:
                 if (mCurrentPokemon == null) return false;
-                return setFavoriteCurrentPokemon(!mCurrentPokemon.isFavorite());
+                if(mCurrentPokemon.isFavorite())
+                {
+                    setFavoriteCurrentPokemon(false);
+                }
+                else
+                {
+                    ShowDialog();
+                }
+                return true;
             default:
                 return false;
         }
@@ -109,7 +117,7 @@ public class DetailFragment extends Fragment  {
         ratingBar.setRating(pokemon.getRating());
     }
 
-    private boolean setFavoriteCurrentPokemon(boolean setFavorite) {
+    public void setFavoriteCurrentPokemon(boolean setFavorite) {
         FavoritePokemon favoritePokemon = new FavoritePokemon(getContext(), mCurrentPokemon);
         ArrayList<Pokemon> favoriteList = PokemonLoader.getInstance().FavoriteList;
 
@@ -132,9 +140,6 @@ public class DetailFragment extends Fragment  {
                 mCurrentPokemon.isFavorite(true);
                 SetFavIconOn(true);
             }
-
-            RateMyPokemonDialogFragment dialogFragment = new RateMyPokemonDialogFragment();
-            dialogFragment.show(getFragmentManager(), "rating_dialog");
         }
         else
         {
@@ -147,8 +152,6 @@ public class DetailFragment extends Fragment  {
             ratingBar.setRating(0);
             SetFavIconOn(false);
         }
-
-        return true;
     }
 
     @Override
@@ -158,6 +161,12 @@ public class DetailFragment extends Fragment  {
         favoriteItem.setVisible(true);
 
         SetFavIconOn(mCurrentPokemon.isFavorite());
+    }
+
+    public void ShowDialog()
+    {
+        RateMyPokemonDialogFragment dialogFragment = new RateMyPokemonDialogFragment(this);
+        dialogFragment.show(getFragmentManager(), "rating_dialog");
     }
 
     private void SetFavIconOn(boolean value)

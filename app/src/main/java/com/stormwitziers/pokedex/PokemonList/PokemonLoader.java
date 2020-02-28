@@ -17,6 +17,7 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.stormwitziers.pokedex.FileWriters.FavoritePokemon;
+import com.stormwitziers.pokedex.FileWriters.WebserviceFavoriteValues;
 import com.stormwitziers.pokedex.FileWriters.Writer;
 import com.stormwitziers.pokedex.Pokemon;
 
@@ -41,7 +42,9 @@ public class PokemonLoader {
 
     public interface IPokemonLoaderHandler {
         void PokemonLoaded(int pokemonPosition);
+
         void RefreshFavorites();
+
         void PokemonUpdated(int pokemonPosition);
     }
 
@@ -68,7 +71,7 @@ public class PokemonLoader {
         FavoriteList = new ArrayList<Pokemon>();
     }
 
-    public boolean isNameUnique(final String name){
+    public boolean isNameUnique(final String name) {
 
         Optional<Pokemon> pokemon = PokemonList.stream().filter(p -> p.getName().equals(name.toLowerCase())).findFirst();
         return !pokemon.isPresent();
@@ -76,7 +79,7 @@ public class PokemonLoader {
 
 
     public void loadPokemons() {
-        final ArrayList<String> favoriteNames = FavoritePokemon.LoadAllFavorites(mContext);
+        final ArrayList<WebserviceFavoriteValues> favoriteNames = FavoritePokemon.LoadAllFavorites(mContext);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, API_URL_POKEMON_SPECIES, null,
                 new Response.Listener<JSONObject>() {
@@ -92,11 +95,17 @@ public class PokemonLoader {
                                                 try {
                                                     Pokemon pokemon = new Pokemon(PokemonList.size(), response.getString("name"));
 
-                                                    if(favoriteNames != null && favoriteNames.contains(pokemon.getName()))
-                                                    {
-                                                        FavoriteList.add(pokemon);
-                                                        pokemon.isFavorite(true);
-                                                        mHandler.RefreshFavorites();
+                                                    // Add to favorites.
+                                                    if (favoriteNames != null) {
+                                                        for (WebserviceFavoriteValues fav :
+                                                                favoriteNames) {
+                                                            if (fav.PokemonName.equals(pokemon.getName())) {
+                                                                FavoriteList.add(pokemon);
+                                                                pokemon.isFavorite(true);
+                                                                mHandler.RefreshFavorites();
+                                                                break;
+                                                            }
+                                                        }
                                                     }
 
                                                     loadPokemonBitMap(pokemon, response.getJSONObject("sprites").getString("front_default"));

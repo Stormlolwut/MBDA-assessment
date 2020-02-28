@@ -2,6 +2,7 @@ package com.stormwitziers.pokedex.FileWriters;
 
 import android.content.Context;
 
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.stormwitziers.pokedex.Pokemon;
 
 import org.json.JSONArray;
@@ -14,13 +15,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class FavoritePokemon  {
+
+
     private static final String FAVORITE = "Favorite";
     private static final String FILE_NAME = "Favorites";
-    private static final String OBJECT_NAME = "favorite";
+    private static final String NAME = "name";
+    private static final String RATING = "rating";
 
     private final Pokemon mPokemon;
     private final File mParent;
@@ -51,13 +55,14 @@ public class FavoritePokemon  {
             String content = fileReader.readLine();
             JSONObject pokemonJson = new JSONObject(content);
 
-            // WRITE
-            JSONArray jsonArray = new JSONArray(pokemonJson.getString(OBJECT_NAME));
-            jsonArray.put(mPokemon.getName());
-            pokemonJson.put(OBJECT_NAME, jsonArray);
+            // JSON
+            JSONObject obj = new JSONObject();
+            obj.put(NAME, mPokemon.getName());
+            obj.put(RATING, mPokemon.getRating());
 
 
-            AddFavoriteArray(favoriteFile, pokemonJson);
+            pokemonJson.put(mPokemon.getName(), obj);
+            SaveJsonToFile(favoriteFile, pokemonJson);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
@@ -80,25 +85,15 @@ public class FavoritePokemon  {
             JSONObject pokemonJson = new JSONObject(content);
 
             // WRITE
-            JSONArray jsonArray = new JSONArray(pokemonJson.getString(OBJECT_NAME));
-            for (int i = 0; i < jsonArray.length(); i++)
-            {
-                String name = jsonArray.getString(i);
-                if(name.equals(mPokemon.getName()))
-                {
-                    jsonArray.remove(i);
-                    break;
-                }
-            }
+            pokemonJson.remove(mPokemon.getName());
 
-            pokemonJson.put(OBJECT_NAME, jsonArray);
-            AddFavoriteArray(favoriteFile, pokemonJson);
+            SaveJsonToFile(favoriteFile, pokemonJson);
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public static ArrayList<String> LoadAllFavorites(Context context)
+    public static ArrayList<WebserviceFavoriteValues> LoadAllFavorites(Context context)
     {
         File parent = new File(context.getFilesDir(), FAVORITE);
         if(!parent.exists())
@@ -120,14 +115,18 @@ public class FavoritePokemon  {
             String content = fileReader.readLine();
             JSONObject pokemonJson = new JSONObject(content);
 
-            ArrayList<String> strings = new ArrayList<String>();
-            JSONArray array = new JSONArray(pokemonJson.getString(OBJECT_NAME));
-            for (int i = 0; i < array.length(); i++)
-            {
-                strings.add((String)array.get(i));
+            ArrayList<WebserviceFavoriteValues> values = new ArrayList<>();
+            for (Iterator<String> it = pokemonJson.keys(); it.hasNext(); ) {
+                String key = it.next();
+
+                JSONObject obj = pokemonJson.getJSONObject(key);
+                String name = obj.getString(NAME);
+                float rating = (float)obj.getDouble(RATING);
+
+                values.add(new WebserviceFavoriteValues(name, rating));
             }
 
-            return strings;
+            return values;
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
@@ -135,7 +134,7 @@ public class FavoritePokemon  {
         return null;
     }
 
-    private static void AddFavoriteArray(File file, JSONObject jsonObject) throws IOException {
+    private static void SaveJsonToFile(File file, JSONObject jsonObject) throws IOException {
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
 
         bufferedWriter.write(jsonObject.toString());
@@ -148,9 +147,8 @@ public class FavoritePokemon  {
         try {
             file.createNewFile();
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(OBJECT_NAME, new ArrayList<String>());
-            AddFavoriteArray(file, jsonObject);
-        } catch (IOException | JSONException e) {
+            SaveJsonToFile(file, jsonObject);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
