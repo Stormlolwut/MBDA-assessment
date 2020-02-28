@@ -85,7 +85,8 @@ public class FavoritePokemon {
         File parent = new File(context.getFilesDir(), PARENT_FILE_NAME);
         File[] files = parent.listFiles();
 
-        assert files != null;
+        if(files == null) files = new File[0];
+
         for(File f: files)
         {
             String name = f.getName();
