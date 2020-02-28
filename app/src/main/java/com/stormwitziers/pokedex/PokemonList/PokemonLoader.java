@@ -102,6 +102,7 @@ public class PokemonLoader {
                                                             if (fav.PokemonName.equals(pokemon.getName())) {
                                                                 FavoriteList.add(pokemon);
                                                                 pokemon.isFavorite(true);
+                                                                pokemon.setRating(fav.PokemonRating);
                                                                 mHandler.RefreshFavorites();
                                                                 break;
                                                             }
