@@ -28,7 +28,10 @@ import static com.stormwitziers.pokedex.PokemonService.POKEMON_NOTIFICATION_CHAN
 
 
 public class MainActivity extends AppCompatActivity implements OverviewFragment.OnPokemonSelected, RateMyPokemonDialogFragment.OnPokemonRatingDialogListener {
+
     private Spinner mSpinner;
+    private boolean mFirstTimeSpinnerInit;
+
     private OverviewFragment.OnPokemonSelected mOnPokemonSelected;
     public ArrayAdapter<String> SpinnerAdapter;
 
@@ -70,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         startService(pokemonServiceIntent);
 
         mOnPokemonSelected = this;
+
+        mFirstTimeSpinnerInit = true;
         initializeSpinner();
     }
 
@@ -108,8 +113,11 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         }
     }
 
+
     // TODO: Maybe own class "FavoritePokemon"?
     public void initializeSpinner() {
+
+
         ArrayList<String> pokemonNames = new ArrayList<>();
         for (Pokemon pokemon : PokemonLoader.getInstance().FavoriteList) {
             pokemonNames.add(pokemon.getName());
@@ -124,8 +132,12 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Pokemon pokemon = PokemonLoader.getInstance().FavoriteList.get(position);
-                mOnPokemonSelected.onItemSelected(pokemon);
+                if(!mFirstTimeSpinnerInit){
+                    Pokemon pokemon = PokemonLoader.getInstance().FavoriteList.get(position);
+                    mOnPokemonSelected.onItemSelected(pokemon);
+                }
+
+                mFirstTimeSpinnerInit = false;
             }
 
             @Override
