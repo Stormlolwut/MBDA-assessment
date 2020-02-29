@@ -1,9 +1,13 @@
 package com.stormwitziers.pokedex.FileWriters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+
+import com.stormwitziers.pokedex.Pokemon;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,7 +37,7 @@ public class Writer {
         }
     }
 
-    public void Save() {
+    public void save() {
         File fileBitmap = new File(parent, mPokemon.getName() + ".BMP");
         File filePokemon = new File(parent, mPokemon.getName() + ".json");
 
@@ -57,6 +61,7 @@ public class Writer {
                 obj.put("picture", fileBitmap.getAbsolutePath());
                 obj.put("type", mPokemon.getType());
                 obj.put("favorite", mPokemon.isFavorite());
+                obj.put("custom", mPokemon.isCustom());
                 BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePokemon));
                 bufferedWriter.write(obj.toString());
                 bufferedWriter.close();
@@ -66,8 +71,25 @@ public class Writer {
         }
     }
 
-    public void Delete() {
-        throw new UnsupportedOperationException();
+    public boolean delete() {
+        boolean deleteSucces = false;
+
+        File fileBitmap = new File(parent, mPokemon.getName() + ".BMP");
+        File filePokemon = new File(parent, mPokemon.getName() + ".json");
+
+        fileBitmap.delete();
+        deleteSucces = filePokemon.delete();
+        return deleteSucces;
+    }
+
+    public void update(Pokemon previousPokemon){
+        File fileBitmap = new File(parent, previousPokemon.getName() + ".BMP");
+        File filePokemon = new File(parent, previousPokemon.getName() + ".json");
+
+        fileBitmap.delete();
+        filePokemon.delete();
+
+        save();
     }
 
     public static ArrayList<com.stormwitziers.pokedex.Pokemon> LoadAllPokemons(Context context) {
@@ -95,7 +117,7 @@ public class Writer {
 
                 // Pokemon properties.
                 Drawable drawable = Drawable.createFromPath(pokemonJson.getString("picture"));
-                com.stormwitziers.pokedex.Pokemon pokemon = new com.stormwitziers.pokedex.Pokemon(pokemonJson.getString("name"), drawable, pokemonJson.getString("type"));
+                com.stormwitziers.pokedex.Pokemon pokemon = new com.stormwitziers.pokedex.Pokemon(pokemonJson.getString("name"), drawable, pokemonJson.getString("type"), pokemonJson.getBoolean("custom"));
                 pokemon.setRating((float)pokemonJson.getDouble("rating"));
                 pokemon.isFavorite(pokemonJson.getBoolean("favorite"));
 
@@ -106,5 +128,11 @@ public class Writer {
         }
 
         return pokemons;
+    }
+
+    public BitmapDrawable getPokemonBitmap(Resources resources){
+        File fileBitmap = new File(parent, mPokemon.getName() + ".BMP");
+        Bitmap bitmap = BitmapFactory.decodeFile(fileBitmap.getAbsolutePath());
+        return new BitmapDrawable(resources, bitmap);
     }
 }

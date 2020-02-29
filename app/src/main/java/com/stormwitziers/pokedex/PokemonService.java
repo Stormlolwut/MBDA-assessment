@@ -33,13 +33,13 @@ public class PokemonService extends Service {
     public void onCreate(){
 
         mPokemonArray = new Pokemon[] {
-                new Pokemon("Bulbasaur", getResources().getDrawable(R.drawable.pokemon_bulbasaur), "wow"),
-                new Pokemon("Dragonite", getResources().getDrawable(R.drawable.pokemon_dragonite), "wow"),
-                new Pokemon("Pikachu", getResources().getDrawable(R.drawable.pokemon_pikachu), "wow"),
-                new Pokemon("Sonja", getResources().getDrawable(R.drawable.pokemon_pikachu), "wow"),
-                new Pokemon("André", getResources().getDrawable(R.drawable.pokemon_pikachu), "wow"),
-                new Pokemon("Huseyin", getResources().getDrawable(R.drawable.pokemon_pikachu), "wow"),
-                new Pokemon("Hakan", getResources().getDrawable(R.drawable.pokemon_peach), "wow"),
+                new Pokemon("Bulbasaur", getResources().getDrawable(R.drawable.pokemon_bulbasaur), "wow", false),
+                new Pokemon("Dragonite", getResources().getDrawable(R.drawable.pokemon_dragonite), "wow", false),
+                new Pokemon("Pikachu", getResources().getDrawable(R.drawable.pokemon_pikachu), "wow", false),
+                new Pokemon("Sonja", getResources().getDrawable(R.drawable.pokemon_pikachu), "wow", false),
+                new Pokemon("André", getResources().getDrawable(R.drawable.pokemon_pikachu), "wow", false),
+                new Pokemon("Huseyin", getResources().getDrawable(R.drawable.pokemon_pikachu), "wow", false),
+                new Pokemon("Hakan", getResources().getDrawable(R.drawable.pokemon_peach), "wow", false),
         };
 
         startForeground(POKEMON_NOTIFICATION, getNotification());

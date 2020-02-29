@@ -4,10 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.widget.ImageView;
-
-import androidx.annotation.RequiresApi;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,11 +22,12 @@ import com.stormwitziers.pokedex.Pokemon;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class PokemonLoader {
-    public interface IPokemonLoaderHandler {
+public class PokemonLoader implements Serializable {
+    public interface IPokemonLoaderHandler  {
         void PokemonLoaded(int pokemonPosition);
 
         void RefreshFavorites();
@@ -41,10 +39,10 @@ public class PokemonLoader {
     private static final String API_URL_POKEMON = "https://pokeapi.co/api/v2/pokemon/";
     private static final String API_URL_POKEMON_FORM = "https://pokeapi.co/api/v2/pokemon-form/";
 
-    private RequestQueue mRequestQueue;
-    private Context mContext;
+    private transient RequestQueue mRequestQueue;
+    private transient Context mContext;
 
-    private IPokemonLoaderHandler mHandler;
+    private transient IPokemonLoaderHandler mHandler;
 
     public ArrayList<Pokemon> PokemonList;
     public ArrayList<Pokemon> FavoriteList;

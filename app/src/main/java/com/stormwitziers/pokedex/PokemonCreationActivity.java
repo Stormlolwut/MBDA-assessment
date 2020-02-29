@@ -1,11 +1,10 @@
 package com.stormwitziers.pokedex;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
@@ -26,16 +24,18 @@ import com.stormwitziers.pokedex.PokemonList.PokemonLoader;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 public class PokemonCreationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private String mCurrentPhotoPath;
+    private PokemonLoader mPokemonLoader;
+    private Pokemon mPreviousPokemon;
+
+    private ArrayAdapter<CharSequence> mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,10 +46,32 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         setSupportActionBar(toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mPokemonLoader = (PokemonLoader) getIntent().getSerializableExtra("PokemonLoader");
+        mPreviousPokemon = (Pokemon) getIntent().getSerializableExtra("Pokemon");
+
         Spinner pokemonType = findViewById(R.id.pokemon_creation_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.string_pokemon_type_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        pokemonType.setAdapter(adapter);
+        mAdapter = ArrayAdapter.createFromResource(this, R.array.string_pokemon_type_array, android.R.layout.simple_spinner_item);
+        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        pokemonType.setAdapter(mAdapter);
+
+        if(mPreviousPokemon != null){
+            setPokemonData();
+        }
+    }
+
+    private void setPokemonData(){
+        //TODO: get image from json since you cant serialize a bitmap in the pokemon class
+        EditText name = findViewById(R.id.pokemon_creation_name);
+        Spinner type = findViewById(R.id.pokemon_creation_spinner);
+        ImageButton image = findViewById(R.id.pokemon_creation_profile_picture);
+
+        Writer writer = new Writer(this.getApplicationContext(), mPreviousPokemon);
+        BitmapDrawable pokemonImage = writer.getPokemonBitmap(getResources());
+
+        name.setText(mPreviousPokemon.getName());
+        type.setSelection(mAdapter.getPosition(mPreviousPokemon.getType()));
+
+        image.setImageDrawable(pokemonImage);
     }
 
     public void savePokemon(View v){
@@ -57,13 +79,11 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         Spinner type = findViewById(R.id.pokemon_creation_spinner);
         ImageButton image = findViewById(R.id.pokemon_creation_profile_picture);
 
-        // TODO: Check if it still works thx Storm <3
-         PokemonLoader loader = ((MainActivity)getBaseContext()).getPokemonLoader();
 
         if(TextUtils.isEmpty(name.getText())) {
             name.setError("Please fill in a name for your pokemon!");
             return;
-        }else if(!loader.isNameUnique(name.getText().toString())){
+        }else if(!mPokemonLoader.isNameUnique(name.getText().toString())){
             name.setError("That name is already taken please us an other!");
             return;
         }
@@ -73,11 +93,16 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
             return;
         }
 
-        Pokemon pokemon = new Pokemon(name.getText().toString(), image.getDrawable(), type.getSelectedItem().toString());
+        Pokemon pokemon = new Pokemon(name.getText().toString(), image.getDrawable(), type.getSelectedItem().toString(), true);
         Writer writer = new Writer(this, pokemon);
-        writer.Save();
 
-        loader.CustomPokemonList.add(pokemon);
+        if(mPreviousPokemon == null) writer.save();
+        else {
+            writer.update(mPreviousPokemon);
+            setResult(RESULT_OK, null);
+        }
+
+        mPokemonLoader.CustomPokemonList.add(pokemon);
         this.finish();
     }
 

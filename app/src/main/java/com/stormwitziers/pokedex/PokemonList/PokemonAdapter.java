@@ -66,8 +66,24 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> impl
     }
 
     public void addPokemons(ArrayList<Pokemon> pokemons){
-        mData.addAll(pokemons);
+
+        addNewPokemons(pokemons);
         notifyDataSetChanged();
+    }
+
+    private void addNewPokemons(ArrayList<Pokemon> newList){
+
+        for (int i =0; i< newList.size(); i++){
+            boolean constains = false;
+
+            for (int j =0; j< mData.size(); j++){
+                if(mData.get(j).equals(newList.get(i))){
+                    constains = true;
+                }
+            }
+
+            if(!constains) { mData.add(newList.get(i)); }
+        }
     }
 
     @Override

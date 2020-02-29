@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -53,6 +54,7 @@ public class DetailFragment extends Fragment  {
 
         favoriteItem.setVisible(false);
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -109,12 +111,21 @@ public class DetailFragment extends Fragment  {
 
         TextView pokeName = currentView.findViewById(R.id.details_name);
         ImageView pokeImage = currentView.findViewById(R.id.details_picture);
+
+        Button editButton = currentView.findViewById(R.id.details_edit);
+        Button deleteButton = currentView.findViewById(R.id.details_delete);
+
         ratingBar = currentView.findViewById(R.id.details_ratingbar);
 
         pokeName.setText(pokemon.getName());
         pokeImage.setImageDrawable(pokemon.getPicture());
 
         ratingBar.setRating(pokemon.getRating());
+
+        if(pokemon.isCustom()){
+            editButton.setEnabled(true);
+            deleteButton.setEnabled(true);
+        }
     }
 
     public void setFavoriteCurrentPokemon(boolean setFavorite) {
@@ -163,14 +174,12 @@ public class DetailFragment extends Fragment  {
         SetFavIconOn(mCurrentPokemon.isFavorite());
     }
 
-    public void ShowDialog()
-    {
+    public void ShowDialog() {
         RateMyPokemonDialogFragment dialogFragment = new RateMyPokemonDialogFragment(this);
         dialogFragment.show(getFragmentManager(), "rating_dialog");
     }
 
-    private void SetFavIconOn(boolean value)
-    {
+    private void SetFavIconOn(boolean value) {
         if(value)
         {
             favoriteItem.setIcon(android.R.drawable.star_big_on);

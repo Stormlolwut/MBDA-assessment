@@ -43,5 +43,32 @@
             android:isIndicator="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/details_name" />
+
+        <Button
+            android:id="@+id/details_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="64dp"
+            android:enabled="false"
+            android:onClick="deletePokemon"
+            android:text="Delete"
+            app:layout_constraintEnd_toStartOf="@+id/details_edit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/details_ratingbar" />
+
+        <Button
+            android:id="@+id/details_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="32dp"
+            android:enabled="false"
+            android:onClick="editPokemon"
+            android:text="Edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/details_delete"
+            app:layout_constraintTop_toBottomOf="@+id/details_ratingbar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

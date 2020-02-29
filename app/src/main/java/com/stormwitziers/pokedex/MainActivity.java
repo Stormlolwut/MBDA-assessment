@@ -1,5 +1,6 @@
 package com.stormwitziers.pokedex;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
@@ -15,19 +16,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
-import com.stormwitziers.pokedex.FileWriters.FavoritePokemon;
+import com.stormwitziers.pokedex.FileWriters.Writer;
 import com.stormwitziers.pokedex.Fragments.DetailFragment;
 import com.stormwitziers.pokedex.Fragments.OverviewFragment;
 import com.stormwitziers.pokedex.PokemonList.PokemonLoader;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.stormwitziers.pokedex.PokemonService.POKEMON_NOTIFICATION_CHANNEL;
 
 
-public class MainActivity extends AppCompatActivity implements OverviewFragment.OnPokemonSelected, RateMyPokemonDialogFragment.OnPokemonRatingDialogListener {
+public class MainActivity extends AppCompatActivity implements OverviewFragment.OnPokemonSelected, RateMyPokemonDialogFragment.OnPokemonRatingDialogListener, Serializable {
 
     private Spinner mSpinner;
 
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
     private final String OVERVIEW_FRAGMENT_TAG = "fragment_list";
     private final String DETAIL_VIEW_FRAGMENT_TAG = "fragment_details";
+
+    private final int EDIT_POKEMON_RESULT = 1;
 
     private FragmentManager mFragmentManager;
 
@@ -102,13 +107,11 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     }
 
     private void createNotificationChannel() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(POKEMON_NOTIFICATION_CHANNEL, name, NotificationManager.IMPORTANCE_LOW);
-            notificationChannel.setDescription(description);
+        NotificationChannel notificationChannel = new NotificationChannel(POKEMON_NOTIFICATION_CHANNEL, name, NotificationManager.IMPORTANCE_LOW);
+        notificationChannel.setDescription(description);
 
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            Objects.requireNonNull(notificationManager).createNotificationChannel(notificationChannel);
-        }
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        Objects.requireNonNull(notificationManager).createNotificationChannel(notificationChannel);
     }
 
 
@@ -149,10 +152,61 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
     public void CreateNewPokemon(View v){
         Intent pokemonCreation = new Intent(this, com.stormwitziers.pokedex.PokemonCreationActivity.class);
+        pokemonCreation.putExtra("PokemonLoader", mPokemonLoader);
         startActivity(pokemonCreation);
     }
 
+    public void deletePokemon(View v){
+        TextView name = findViewById(R.id.details_name);
+        Pokemon p = getCustomPokemon(name.getText().toString());
+
+        if(p == null) return;
+
+        mPokemonLoader.CustomPokemonList.remove(p);
+
+        Writer writer = new Writer(this.getApplicationContext(), p);
+        writer.delete();
+
+        Intent i = new Intent(this.getApplicationContext(), MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+    }
+
+    public void editPokemon(View v){
+        TextView name = findViewById(R.id.details_name);
+        Pokemon p = getCustomPokemon(name.getText().toString());
+
+        Intent pokemonCreation = new Intent(this, com.stormwitziers.pokedex.PokemonCreationActivity.class);
+        pokemonCreation.putExtra("PokemonLoader", mPokemonLoader);
+        pokemonCreation.putExtra("Pokemon", p);
+        startActivityForResult(pokemonCreation, EDIT_POKEMON_RESULT);
+
+        //resetActivities();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == EDIT_POKEMON_RESULT){
+            if(resultCode == RESULT_OK){
+                Intent i = new Intent(this.getApplicationContext(), MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            }
+        }
+    }
+
+    private Pokemon getCustomPokemon(String name){
+        for (int i = 0; i < mPokemonLoader.CustomPokemonList.size(); i++){
+            Pokemon p = mPokemonLoader.CustomPokemonList.get(i);
+            if(p.getName().equals(name)){
+                return p;
+            }
+        }
+        return null;
+    }
+
     public PokemonLoader getPokemonLoader() {
-        return mPokemonLoader;
+        return this.mPokemonLoader;
     }
 }

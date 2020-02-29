@@ -9,10 +9,12 @@ public class Pokemon implements Serializable {
 
     private int position;
     private String name;
-    private Drawable picture;
+    private transient Drawable picture;
     private String type;
     private float rating;
+
     private boolean isFavorite;
+    private boolean isCustom;
 
     public int getPosition() { return position; }
 
@@ -28,14 +30,17 @@ public class Pokemon implements Serializable {
 
     public boolean isFavorite() { return isFavorite; }
 
+    public boolean isCustom() { return isCustom; }
+
     public void setRating(float rating) { this.rating = rating; }
 
     public float getRating(){ return rating; }
 
-    public Pokemon(String name, Drawable picture, String type){
+    public Pokemon(String name, Drawable picture, String type, boolean isCustom){
         this.name = name;
         this.picture = picture;
         this.type = type;
+        this.isCustom = isCustom;
     }
     public Pokemon(int position, String name)
     {
