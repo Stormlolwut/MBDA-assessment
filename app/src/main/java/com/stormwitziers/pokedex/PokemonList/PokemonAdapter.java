@@ -65,13 +65,15 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonViewHolder> impl
         ((TextView) holder.pokemonItem.getChildAt(1)).setText(pokemon.getName());
     }
 
-    @Override
-    public Filter getFilter() {
-
-
-        return mPokemonSearchFilter;
+    public void addPokemons(ArrayList<Pokemon> pokemons){
+        mData.addAll(pokemons);
+        notifyDataSetChanged();
     }
 
+    @Override
+    public Filter getFilter() {
+        return mPokemonSearchFilter;
+    }
 
     public interface OnPokemonListener {
         void onPokemonClick(int position);

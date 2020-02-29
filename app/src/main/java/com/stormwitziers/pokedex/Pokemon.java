@@ -42,4 +42,8 @@ public class Pokemon implements Serializable {
         this.name = name;
         this.position = position;
     }
+
+    public boolean equals(Pokemon pokemon){
+        return this.name.equals(pokemon.getName());
+    }
 }
