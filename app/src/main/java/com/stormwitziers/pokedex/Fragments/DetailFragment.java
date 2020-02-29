@@ -36,7 +36,8 @@ public class DetailFragment extends Fragment  {
     private MenuItem favoriteItem = null;
     private RatingBar ratingBar;
 
-    public DetailFragment(MainActivity mainActivity, Pokemon pokemon){
+    public void initialize(MainActivity mainActivity, Pokemon pokemon)
+    {
         this.mCurrentPokemon = pokemon;
         this.mMainActivity = mainActivity;
     }

@@ -72,12 +72,23 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         mFragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
+
         mPokemonLoader = new PokemonLoader(this);
-        mOverviewFragment = new OverviewFragment(this, mPokemonLoader);
+        mOverviewFragment = new OverviewFragment();
+        mOverviewFragment.initialize(this, mPokemonLoader);
         mPokemonLoader.setHandler(mOverviewFragment);
+
+        for (int i = 0; i < mFragmentManager.getBackStackEntryCount(); i++) {
+            mFragmentManager.popBackStack();
+        }
+        Fragment overviewFragment = mFragmentManager.findFragmentByTag(OVERVIEW_FRAGMENT_TAG);
+        if (overviewFragment != null) {
+            fragmentTransaction.remove(overviewFragment);
+        }
 
         fragmentTransaction.add(R.id.FragmentLayout, mOverviewFragment, OVERVIEW_FRAGMENT_TAG);
         fragmentTransaction.commit();
+
 
         Intent pokemonServiceIntent = new Intent(this, PokemonService.class);
 
@@ -98,15 +109,16 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     @Override
     public void onItemSelected(Pokemon pokemon) {
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        mDetailFragment = new DetailFragment(this, pokemon);
+        mDetailFragment = new DetailFragment();
+        mDetailFragment.initialize(this, pokemon);
 
         fragmentTransaction.addToBackStack(DETAIL_VIEW_FRAGMENT_TAG);
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-        {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             fragmentTransaction.replace(mFragmentManager.findFragmentByTag(OVERVIEW_FRAGMENT_TAG).getId(), mDetailFragment, DETAIL_VIEW_FRAGMENT_TAG);
-        }
-        else
-        {
+        } else if (mFragmentManager.findFragmentByTag(DETAIL_VIEW_FRAGMENT_TAG) == null) {
+            fragmentTransaction.add(R.id.FragmentLayout, mDetailFragment, DETAIL_VIEW_FRAGMENT_TAG);
+        } else {
+            fragmentTransaction.remove(mFragmentManager.findFragmentByTag(DETAIL_VIEW_FRAGMENT_TAG));
             fragmentTransaction.add(R.id.FragmentLayout, mDetailFragment, DETAIL_VIEW_FRAGMENT_TAG);
         }
         fragmentTransaction.commitAllowingStateLoss();
@@ -127,8 +139,6 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         Objects.requireNonNull(notificationManager).createNotificationChannel(notificationChannel);
     }
 
-
-    // TODO: Maybe own class "FavoritePokemon"?
     public void initializeSpinner() {
         ArrayList<String> pokemonNames = new ArrayList<>();
         pokemonNames.add("Home");
@@ -151,10 +161,8 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
                 if (position != 0) {
                     Pokemon pokemon = mPokemonLoader.FavoriteList.get(position - 1);
                     mOnPokemonSelected.onItemSelected(pokemon);
-                }
-                else{
-                    for (int i = 0; i < mFragmentManager.getBackStackEntryCount(); i++)
-                    {
+                } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    for (int i = 0; i < mFragmentManager.getBackStackEntryCount(); i++) {
                         mFragmentManager.popBackStack();
                     }
                 }
@@ -240,26 +248,24 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
             String pokemonName = ((TextView) findViewById(R.id.details_name)).getText().toString();
             UpdateSpinner(pokemonName);
-        }
-        else
-        {
+        } else {
             UpdateSpinner("Home");
         }
     }
 
-    private void UpdateSpinner(String pokemonName)
-    {
+    private void UpdateSpinner(String pokemonName) {
         for (int i = 0; i < SpinnerAdapter.getCount(); i++) {
             String name = SpinnerAdapter.getItem(i);
             if (name.equals(pokemonName)) {
                 mSpinner.setSelection(i, false);
-                break;
+                return;
             }
         }
+
+        mSpinner.setSelection(0, false);
     }
 
-    public void PopBackStackFragment()
-    {
+    public void PopBackStackFragment() {
         mFragmentManager.popBackStack();
     }
 

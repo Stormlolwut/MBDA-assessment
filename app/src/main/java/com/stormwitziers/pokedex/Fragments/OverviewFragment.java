@@ -30,7 +30,7 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
     private OnPokemonSelected mOnPokemonSelected;
     private MainActivity mMainActivity;
 
-    public OverviewFragment(MainActivity mainActivity, PokemonLoader pokemonLoader)
+    public void initialize(MainActivity mainActivity, PokemonLoader pokemonLoader)
     {
         this.mMainActivity = mainActivity;
         this.mPokemonLoader = pokemonLoader;
@@ -55,6 +55,7 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
     }
 
     private void addPokemonsToRecycleView(View view){
+        mPokemonLoader = ((MainActivity)getActivity()).getPokemonLoader();
         mAdapter = new PokemonAdapter(mPokemonLoader, this);
 
 
