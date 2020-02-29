@@ -17,7 +17,9 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.stormwitziers.pokedex.FileWriters.FavoritePokemon;
+import com.stormwitziers.pokedex.FileWriters.WebserviceFavoriteValues;
 import com.stormwitziers.pokedex.FileWriters.Writer;
+import com.stormwitziers.pokedex.Fragments.OverviewFragment;
 import com.stormwitziers.pokedex.Pokemon;
 
 import org.json.JSONException;
@@ -27,21 +29,11 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class PokemonLoader {
-    private static PokemonLoader instance;
-
-    public static void instantiate(Context context, IPokemonLoaderHandler handler) {
-        if (instance == null) {
-            instance = new PokemonLoader(context, handler);
-        }
-    }
-
-    public static PokemonLoader getInstance() {
-        return instance;
-    }
-
     public interface IPokemonLoaderHandler {
         void PokemonLoaded(int pokemonPosition);
+
         void RefreshFavorites();
+
         void PokemonUpdated(int pokemonPosition);
     }
 
@@ -58,8 +50,7 @@ public class PokemonLoader {
     public ArrayList<Pokemon> FavoriteList;
     public ArrayList<Pokemon> CustomPokemonList;
 
-    private PokemonLoader(Context context, IPokemonLoaderHandler handler) {
-        mHandler = handler;
+    public PokemonLoader(Context context) {
         mContext = context;
 
         mRequestQueue = Volley.newRequestQueue(context);
@@ -70,7 +61,11 @@ public class PokemonLoader {
         CustomPokemonList = new ArrayList<Pokemon>();
     }
 
-    public boolean isNameUnique(final String name){
+    public void setHandler(OverviewFragment mOverviewFragment) {
+        mHandler = mOverviewFragment;
+    }
+
+    public boolean isNameUnique(final String name) {
 
         Optional<Pokemon> pokemon = PokemonList.stream().filter(p -> p.getName().equals(name.toLowerCase())).findFirst();
         return !pokemon.isPresent();
@@ -78,7 +73,7 @@ public class PokemonLoader {
 
 
     public void loadPokemons() {
-        final ArrayList<String> favoriteNames = FavoritePokemon.LoadAllFavorites(mContext);
+        final ArrayList<WebserviceFavoriteValues> favoriteNames = FavoritePokemon.LoadAllFavorites(mContext);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, API_URL_POKEMON_SPECIES, null,
                 new Response.Listener<JSONObject>() {
@@ -94,11 +89,18 @@ public class PokemonLoader {
                                                 try {
                                                     Pokemon pokemon = new Pokemon(PokemonList.size(), response.getString("name"));
 
-                                                    if(favoriteNames != null && favoriteNames.contains(pokemon.getName()))
-                                                    {
-                                                        FavoriteList.add(pokemon);
-                                                        pokemon.isFavorite(true);
-                                                        mHandler.RefreshFavorites();
+                                                    // Add to favorites.
+                                                    if (favoriteNames != null) {
+                                                        for (WebserviceFavoriteValues fav :
+                                                                favoriteNames) {
+                                                            if (fav.PokemonName.equals(pokemon.getName())) {
+                                                                FavoriteList.add(pokemon);
+                                                                pokemon.isFavorite(true);
+                                                                pokemon.setRating(fav.PokemonRating);
+                                                                mHandler.RefreshFavorites();
+                                                                break;
+                                                            }
+                                                        }
                                                     }
 
                                                     loadPokemonBitMap(pokemon, response.getJSONObject("sprites").getString("front_default"));

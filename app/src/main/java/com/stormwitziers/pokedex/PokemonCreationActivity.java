@@ -57,7 +57,8 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         Spinner type = findViewById(R.id.pokemon_creation_spinner);
         ImageButton image = findViewById(R.id.pokemon_creation_profile_picture);
 
-        PokemonLoader loader = PokemonLoader.getInstance();
+        // TODO: Check if it still works thx Storm <3
+         PokemonLoader loader = ((MainActivity)getBaseContext()).getPokemonLoader();
 
         if(TextUtils.isEmpty(name.getText())) {
             name.setError("Please fill in a name for your pokemon!");

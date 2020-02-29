@@ -30,7 +30,6 @@ import static com.stormwitziers.pokedex.PokemonService.POKEMON_NOTIFICATION_CHAN
 public class MainActivity extends AppCompatActivity implements OverviewFragment.OnPokemonSelected, RateMyPokemonDialogFragment.OnPokemonRatingDialogListener {
 
     private Spinner mSpinner;
-    private boolean mFirstTimeSpinnerInit;
 
     private OverviewFragment.OnPokemonSelected mOnPokemonSelected;
     public ArrayAdapter<String> SpinnerAdapter;
@@ -46,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     private OverviewFragment mOverviewFragment;
     private DetailFragment mDetailFragment;
 
+    private PokemonLoader mPokemonLoader;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,9 +62,9 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         mFragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
-        mOverviewFragment = new OverviewFragment(this);
-
-        PokemonLoader.instantiate(this, mOverviewFragment);
+        mPokemonLoader = new PokemonLoader(this);
+        mOverviewFragment = new OverviewFragment(this, mPokemonLoader);
+        mPokemonLoader.setHandler(mOverviewFragment);
 
         fragmentTransaction.add(R.id.LinearLayout, mOverviewFragment, OVERVIEW_FRAGMENT_TAG);
         fragmentTransaction.commit();
@@ -74,11 +74,8 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         startService(pokemonServiceIntent);
 
         mOnPokemonSelected = this;
-
-        mFirstTimeSpinnerInit = true;
-        initializeSpinner();
+        mPokemonLoader.loadPokemons();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -118,9 +115,10 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     // TODO: Maybe own class "FavoritePokemon"?
     public void initializeSpinner() {
         ArrayList<String> pokemonNames = new ArrayList<>();
-        if(PokemonLoader.getInstance().FavoriteList != null)
+        pokemonNames.add("Home");
+        if(mPokemonLoader.FavoriteList != null)
         {
-            for (Pokemon pokemon : PokemonLoader.getInstance().FavoriteList) {
+            for (Pokemon pokemon : mPokemonLoader.FavoriteList) {
                 pokemonNames.add(pokemon.getName());
             }
         }
@@ -130,17 +128,17 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         SpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         mSpinner.setAdapter(SpinnerAdapter);
-        mSpinner.setSelection(0, false);
+        mSpinner.setSelection(0,false);
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(!mFirstTimeSpinnerInit){
-                    Pokemon pokemon = PokemonLoader.getInstance().FavoriteList.get(position);
+                // position 0 is the name favorites.
+                if(position != 0){
+                    Pokemon pokemon = mPokemonLoader.FavoriteList.get(position - 1);
                     mOnPokemonSelected.onItemSelected(pokemon);
                 }
-
-                mFirstTimeSpinnerInit = false;
             }
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -152,5 +150,9 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     public void CreateNewPokemon(View v){
         Intent pokemonCreation = new Intent(this, com.stormwitziers.pokedex.PokemonCreationActivity.class);
         startActivity(pokemonCreation);
+    }
+
+    public PokemonLoader getPokemonLoader() {
+        return mPokemonLoader;
     }
 }

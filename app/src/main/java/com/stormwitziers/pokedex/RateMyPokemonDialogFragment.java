@@ -11,23 +11,31 @@ import android.widget.RatingBar;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import com.stormwitziers.pokedex.Fragments.DetailFragment;
+
 public class RateMyPokemonDialogFragment extends DialogFragment {
 
     public OnPokemonRatingDialogListener listener;
 
-    public void onAttach(Context context){
+    private DetailFragment mDetailFragment;
+
+    public RateMyPokemonDialogFragment(DetailFragment detailFragment) {
+        mDetailFragment = detailFragment;
+    }
+
+    public void onAttach(Context context) {
         super.onAttach(context);
 
-        try{
+        try {
             listener = (OnPokemonRatingDialogListener) context;
-        } catch (ClassCastException e){
+        } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString() + "must implement OnPokemonRatingDialogListener");
         }
     }
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState){
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -36,6 +44,7 @@ public class RateMyPokemonDialogFragment extends DialogFragment {
             public void onClick(DialogInterface dialog, int which) {
                 RatingBar ratingbar = getDialog().findViewById(R.id.dialog_rating_bar);
                 listener.onPositiveButtonClick(ratingbar.getRating());
+                mDetailFragment.setFavoriteCurrentPokemon(true);
                 dialog.dismiss();
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -48,7 +57,7 @@ public class RateMyPokemonDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    public interface OnPokemonRatingDialogListener{
+    public interface OnPokemonRatingDialogListener {
         void onPositiveButtonClick(float rating);
     }
 }
