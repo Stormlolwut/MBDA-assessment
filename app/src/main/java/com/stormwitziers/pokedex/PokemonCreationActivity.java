@@ -1,6 +1,8 @@
 package com.stormwitziers.pokedex;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -54,12 +56,12 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         pokemonType.setAdapter(mAdapter);
 
-        if(mPreviousPokemon != null){
+        if (mPreviousPokemon != null) {
             setPokemonData();
         }
     }
 
-    private void setPokemonData(){
+    private void setPokemonData() {
         //TODO: get image from json since you cant serialize a bitmap in the pokemon class
         EditText name = findViewById(R.id.pokemon_creation_name);
         Spinner type = findViewById(R.id.pokemon_creation_spinner);
@@ -74,21 +76,21 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         image.setImageDrawable(pokemonImage);
     }
 
-    public void savePokemon(View v){
+    public void savePokemon(View v) {
         EditText name = findViewById(R.id.pokemon_creation_name);
         Spinner type = findViewById(R.id.pokemon_creation_spinner);
         ImageButton image = findViewById(R.id.pokemon_creation_profile_picture);
 
 
-        if(TextUtils.isEmpty(name.getText())) {
+        if (TextUtils.isEmpty(name.getText())) {
             name.setError("Please fill in a name for your pokemon!");
             return;
-        }else if(!mPokemonLoader.isNameUnique(name.getText().toString())){
+        } else if (!mPokemonLoader.isNameUnique(name.getText().toString())) {
             name.setError("That name is already taken please us an other!");
             return;
         }
 
-        if(image.getDrawable() == null) {
+        if (image.getDrawable() == null) {
             name.setError("Please add an image for your pokemon!");
             return;
         }
@@ -96,7 +98,7 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         Pokemon pokemon = new Pokemon(name.getText().toString(), image.getDrawable(), type.getSelectedItem().toString(), true);
         Writer writer = new Writer(this, pokemon);
 
-        if(mPreviousPokemon == null) writer.save();
+        if (mPreviousPokemon == null) writer.save();
         else {
             writer.update(mPreviousPokemon);
             setResult(RESULT_OK, null);
@@ -108,24 +110,30 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
 
     //region Choose profile picture
 
-    public void ChooseProfilePicture(View v){
+    public void ChooseProfilePicture(View v) {
         TakePicture();
     }
 
-    private void TakePicture(){
-        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(takePicture.resolveActivity(getPackageManager()) != null){
-            File image = null;
-            try{
-                image = createImageFile();
-            } catch (IOException e){
-                Log.println(Log.ERROR, "image creation", "an error occurred: " + e);
-                return;
-            }
-            Uri imageURI = FileProvider.getUriForFile(this, "com.stormwitziers.pokedex.fileprovider", image);
-            takePicture.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
+    private void TakePicture() {
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);
+        }
+        else
+        {
+            Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePicture.resolveActivity(getPackageManager()) != null) {
+                File image = null;
+                try {
+                    image = createImageFile();
+                } catch (IOException e) {
+                    Log.println(Log.ERROR, "image creation", "an error occurred: " + e);
+                    return;
+                }
+                Uri imageURI = FileProvider.getUriForFile(this, "com.stormwitziers.pokedex.fileprovider", image);
+                takePicture.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
 
-            startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
+                startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
+            }
         }
     }
 
@@ -133,8 +141,8 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == REQUEST_IMAGE_CAPTURE){
-            if(resultCode == RESULT_OK){
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
                 File image = new File(mCurrentPhotoPath);
                 Uri uri = Uri.fromFile(image);
 
@@ -146,7 +154,7 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         }
     }
 
-    private File createImageFile() throws IOException{
+    private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
 
@@ -162,7 +170,7 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         return image;
     }
 
-    private void addImageToGallery(){
+    private void addImageToGallery() {
         Intent mediaScan = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File image = new File(mCurrentPhotoPath);
         Uri contentUri = Uri.fromFile(image);

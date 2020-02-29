@@ -89,6 +89,8 @@ public class Writer {
         fileBitmap.delete();
         filePokemon.delete();
 
+        mPokemon.setRating(previousPokemon.getRating());
+        mPokemon.isFavorite(previousPokemon.isFavorite());
         save();
     }
 

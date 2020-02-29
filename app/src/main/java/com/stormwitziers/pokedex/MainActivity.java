@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
         mOnPokemonSelected = this;
         mPokemonLoader.loadPokemons();
+        initializeSpinner();
     }
 
     @Override
