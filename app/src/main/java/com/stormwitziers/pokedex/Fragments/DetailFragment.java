@@ -150,6 +150,7 @@ public class DetailFragment extends Fragment  {
                 favoritePokemon.Save();
                 mCurrentPokemon.isFavorite(true);
                 SetFavIconOn(true);
+                mMainActivity.UpdateSpinnerPosition();
             }
         }
         else
@@ -162,6 +163,8 @@ public class DetailFragment extends Fragment  {
             mCurrentPokemon.setRating(0);
             ratingBar.setRating(0);
             SetFavIconOn(false);
+
+            mMainActivity.PopBackStackFragment();
         }
     }
 
@@ -189,4 +192,6 @@ public class DetailFragment extends Fragment  {
             favoriteItem.setIcon(android.R.drawable.star_big_off);
         }
     }
+
+
 }
