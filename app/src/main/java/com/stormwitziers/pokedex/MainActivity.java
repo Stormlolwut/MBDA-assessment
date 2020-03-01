@@ -211,8 +211,6 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         pokemonCreation.putExtra("PokemonLoader", mPokemonLoader);
         pokemonCreation.putExtra("Pokemon", p);
         startActivityForResult(pokemonCreation, EDIT_POKEMON_RESULT);
-
-        //resetActivities();
     }
 
     @Override
@@ -272,5 +270,9 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
     public void UpdateSpinnerPosition() {
         mSpinner.setSelection(SpinnerAdapter.getCount() - 1, false);
+    }
+
+    public void OpenSettings() {
+
     }
 }

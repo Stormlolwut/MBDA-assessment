@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Custom Pokemon">
+
+        <SwitchPreferenceCompat
+            android:key="autoFav"
+            android:title="Automatically favorite"
+            android:summary="When custom pokemon are created then it will automatically be put as favorite."/>
+
+        <SeekBarPreference
+            app:min="0"
+            android:max="5"
+            app:showSeekBarValue="true"
+            android:key="setRating"
+            android:summary="Favorited pokemon"
+            android:title="Set to rate of favorited pokemon" />
+
+    </PreferenceCategory>
+</PreferenceScreen>
