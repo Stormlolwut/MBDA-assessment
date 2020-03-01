@@ -1,6 +1,5 @@
 package com.stormwitziers.pokedex;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -8,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
@@ -41,8 +39,8 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     private OverviewFragment.OnPokemonSelected mOnPokemonSelected;
     public ArrayAdapter<String> SpinnerAdapter;
 
-    private final CharSequence name = "Pokemon channel!";
-    private final String description = "For all your pokemon updates!";
+    private final CharSequence NAME = "The pokedex!";
+    private final String DESCRIPTION = "For all your pokemon updates!";
 
     private final String OVERVIEW_FRAGMENT_TAG = "fragment_list";
     private final String DETAIL_VIEW_FRAGMENT_TAG = "fragment_details";
@@ -55,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     private DetailFragment mDetailFragment;
 
     private PokemonLoader mPokemonLoader;
+    private Intent mPokemonService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +67,8 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
-
         mFragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-
 
         mPokemonLoader = new PokemonLoader(this);
         mOverviewFragment = new OverviewFragment();
@@ -89,13 +86,9 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         fragmentTransaction.add(R.id.FragmentLayout, mOverviewFragment, OVERVIEW_FRAGMENT_TAG);
         fragmentTransaction.commit();
 
-
-        Intent pokemonServiceIntent = new Intent(this, PokemonService.class);
-
-        startService(pokemonServiceIntent);
-
         mOnPokemonSelected = this;
         mPokemonLoader.loadPokemons();
+
         initializeSpinner();
     }
 
@@ -133,8 +126,8 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     }
 
     private void createNotificationChannel() {
-        NotificationChannel notificationChannel = new NotificationChannel(POKEMON_NOTIFICATION_CHANNEL, name, NotificationManager.IMPORTANCE_LOW);
-        notificationChannel.setDescription(description);
+        NotificationChannel notificationChannel = new NotificationChannel(POKEMON_NOTIFICATION_CHANNEL, NAME, NotificationManager.IMPORTANCE_LOW);
+        notificationChannel.setDescription(DESCRIPTION);
 
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         Objects.requireNonNull(notificationManager).createNotificationChannel(notificationChannel);
@@ -175,6 +168,22 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        mPokemonService = new Intent(this, PokemonService.class);
+        mPokemonService.putExtra("favorites", mPokemonLoader);
+        startService(mPokemonService);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mPokemonService == null) return;
+        stopService(mPokemonService);
     }
 
     private void ResetActivity() {

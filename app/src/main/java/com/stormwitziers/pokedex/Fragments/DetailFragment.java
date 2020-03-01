@@ -87,12 +87,10 @@ public class DetailFragment extends Fragment  {
         switch (item.getItemId()) {
             case R.id.toolbar_favorite:
                 if (mCurrentPokemon == null) return false;
-                if(mCurrentPokemon.isFavorite())
-                {
+                if(mCurrentPokemon.isFavorite()) {
                     setFavoriteCurrentPokemon(false);
                 }
-                else
-                {
+                else {
                     ShowDialog();
                 }
                 return true;
