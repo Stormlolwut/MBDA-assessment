@@ -95,12 +95,10 @@ public class PokemonService extends Service {
 
         Bitmap icon = null;
 
-        try{
-            Writer writer = new Writer(this.getApplicationContext(), mFavoriteList.get(mRandomIndex));
-            icon = writer.getPokemonBitmap(getResources()).getBitmap();
-        } catch (Exception e){
 
-        }
+        Writer writer = new Writer(this.getApplicationContext(), mFavoriteList.get(mRandomIndex));
+        icon = writer.getPokemonBitmap(getResources()).getBitmap();
+
 
         if(icon == null) icon = BitmapFactory.decodeResource(getResources(), R.drawable.pokemon_bulbasaur);
         Icon smallcon = Icon.createWithBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.pokemon_bulbasaur));
