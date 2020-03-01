@@ -99,8 +99,7 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         Pokemon pokemon = new Pokemon(name.getText().toString(), image.getDrawable(), type.getSelectedItem().toString(), true);
         Writer writer = new Writer(this, pokemon);
 
-        if(SettingsAppActivity.getInstance().switchPreference.isChecked())
-        {
+        if (SettingsAppActivity.getInstance().switchPreference.isChecked()) {
             pokemon.isFavorite(true);
             pokemon.setRating(SettingsAppActivity.getInstance().seekBarPreference.getValue());
         }
@@ -122,12 +121,21 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
     }
 
     private void TakePicture() {
+
+
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, 1);
-        }
-        else
-        {
+        } else {
+
+
             Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            Intent gallIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            gallIntent.setType("image/*");
+
+            // Always use string resources for UI text.
+            // This says something like "Share this photo with"
+            String title = getResources().getString(R.string.chooser_title);
+
             if (takePicture.resolveActivity(getPackageManager()) != null) {
                 File image = null;
                 try {
@@ -136,10 +144,16 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
                     Log.println(Log.ERROR, "image creation", "an error occurred: " + e);
                     return;
                 }
+
                 Uri imageURI = FileProvider.getUriForFile(this, "com.stormwitziers.pokedex.fileprovider", image);
                 takePicture.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
+                gallIntent.putExtra(Intent.EXTRA_MIME_TYPES, imageURI);
 
-                startActivityForResult(takePicture, REQUEST_IMAGE_CAPTURE);
+                // Create intent to show the chooser dialog
+                Intent chooser = Intent.createChooser(takePicture, title);
+                chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{gallIntent});
+
+                startActivityForResult(chooser, REQUEST_IMAGE_CAPTURE);
             }
         }
     }
@@ -155,6 +169,14 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
 
                 ImageButton profilePicture = findViewById(R.id.pokemon_creation_profile_picture);
                 profilePicture.setImageURI(uri);
+
+                if(profilePicture.getDrawable() == null)
+                {
+                    image.delete();
+                    uri = data.getData();
+
+                    profilePicture.setImageURI(uri);
+                }
 
                 addImageToGallery();
             }
