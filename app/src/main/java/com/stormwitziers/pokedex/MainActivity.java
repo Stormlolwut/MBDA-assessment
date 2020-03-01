@@ -1,6 +1,5 @@
 package com.stormwitziers.pokedex;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -8,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
@@ -48,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     private final String DETAIL_VIEW_FRAGMENT_TAG = "fragment_details";
 
     private final int EDIT_POKEMON_RESULT = 1;
+    private final int SETTINGS_RESULT = 2;
 
     private FragmentManager mFragmentManager;
 
@@ -55,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     private DetailFragment mDetailFragment;
 
     private PokemonLoader mPokemonLoader;
+
+    private SettingsAppActivity mSettingsAppActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,6 +224,13 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
                 startActivity(i);
             }
         }
+        else if(requestCode == SETTINGS_RESULT)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                
+            }
+        }
     }
 
     private Pokemon getCustomPokemon(String name) {
@@ -273,6 +281,9 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     }
 
     public void OpenSettings() {
-
+        Intent intent = new Intent(this, com.stormwitziers.pokedex.SettingsAppActivity.class);
+        startActivityForResult(intent, SETTINGS_RESULT);
+        intent.putExtra("theFragment", mSettingsAppActivity);
     }
+
 }
