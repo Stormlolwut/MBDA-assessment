@@ -5,7 +5,7 @@
     android:id="@+id/detail_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="right">
+    android:layout_gravity="end">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,6 +16,7 @@
             android:layout_width="125dp"
             android:layout_height="125dp"
             android:layout_marginTop="16dp"
+            android:contentDescription="@string/plaatje"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -28,7 +29,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="16dp"
             android:autoSizeTextType="uniform"
-            android:text="TextView"
+            android:text="@string/textview"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.512"
@@ -56,7 +57,7 @@
             android:layout_marginTop="8dp"
             android:enabled="false"
             android:onClick="deletePokemon"
-            android:text="Delete"
+            android:text="@string/delete"
             app:layout_constraintEnd_toStartOf="@+id/details_edit"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/details_ratingbar" />
@@ -70,7 +71,7 @@
             android:layout_marginEnd="32dp"
             android:enabled="false"
             android:onClick="editPokemon"
-            android:text="Edit"
+            android:text="@string/edit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/details_delete"
             app:layout_constraintTop_toBottomOf="@+id/details_ratingbar" />

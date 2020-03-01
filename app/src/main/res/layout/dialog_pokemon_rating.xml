@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textAlignment="center"
-        android:text="Please rate this pokemon!"/>
+        android:text="@string/please_rate_this_pokemon"/>
     <RatingBar
         android:id="@+id/dialog_rating_bar"
         android:layout_gravity="center"

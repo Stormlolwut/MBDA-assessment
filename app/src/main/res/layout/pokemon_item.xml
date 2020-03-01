@@ -11,6 +11,7 @@
         android:layout_height="62dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:contentDescription="@string/plaatje"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@color/colorPrimary"
@@ -23,9 +24,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:autoSizeTextType="none"
-        android:autoText="false"
         android:maxLength="20"
-        android:text="TextView"
+        android:text="@string/textview"
         app:layout_constraintStart_toEndOf="@+id/list_picture"
         app:layout_constraintTop_toTopOf="parent" />
 
