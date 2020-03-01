@@ -178,8 +178,6 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
             mPokemonService = new Intent(this, PokemonService.class);
             mPokemonService.putExtra("favorites", mPokemonLoader);
             startService(mPokemonService);
-        } else if (mPokemonService != null){
-            stopService(mPokemonService);
         }
     }
 
@@ -187,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     protected void onResume() {
         super.onResume();
         if(mPokemonService == null) return;
-        stopService(mPokemonService);
+        this.getApplicationContext().stopService(mPokemonService);
     }
 
     private void ResetActivity() {

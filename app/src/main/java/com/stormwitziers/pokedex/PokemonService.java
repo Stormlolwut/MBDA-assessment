@@ -34,6 +34,9 @@ public class PokemonService extends Service {
     PokemonLoader mPokemonLoader;
     ArrayList<Pokemon> mFavoriteList;
 
+    private Handler mHandler;
+    private Runnable mRunnable;
+
     private int mNotificationDelay;
 
     public void onCreate(){
@@ -44,27 +47,35 @@ public class PokemonService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flag, int startId){
 
-        final Handler handler = new Handler();
+        mHandler = new Handler();
 
         mPokemonLoader = (PokemonLoader) intent.getExtras().get("favorites");
         startForeground(POKEMON_NOTIFICATION, getNotification());
 
-        handler.post(new Runnable() {
+        mRunnable = new Runnable() {
             @Override
             public void run() {
                 mNotificationDelay = (SettingsAppActivity.getInstance().notificationDelayPreference.getValue()) * 1000;
                 mFavoriteList = mPokemonLoader.FavoriteList;
-                handler.postDelayed(this, mNotificationDelay);
+                mHandler.postDelayed(this, mNotificationDelay);
 
-                if(mFavoriteList.size() < 1) return;
+                if (mFavoriteList.size() < 1) return;
 
                 //TODO: add the pokemon from the list instead
                 mRandomIndex = (mRandomIndex + 1 + new Random().nextInt(2)) % mFavoriteList.size();
                 sendNotification();
             }
-        });
+        };
+
+        mHandler.post(mRunnable);
 
         return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacks(mRunnable);
     }
 
     @Override
