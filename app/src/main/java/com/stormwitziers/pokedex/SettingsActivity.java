@@ -12,13 +12,18 @@ public class SettingsActivity extends PreferenceFragmentCompat {
     public SeekBarPreference seekBarPreference;
     public SwitchPreferenceCompat switchPreference;
 
+    public SwitchPreferenceCompat notificationBarPreference;
+    public SeekBarPreference notificationDelayPreference;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         seekBarPreference = (SeekBarPreference)findPreference("setRating");
         switchPreference = (SwitchPreferenceCompat)findPreference("autoFav");
+
+        notificationBarPreference = (SwitchPreferenceCompat)findPreference("notif");
+        notificationDelayPreference = (SeekBarPreference)findPreference("notifDelay");
     }
 
     @Override
