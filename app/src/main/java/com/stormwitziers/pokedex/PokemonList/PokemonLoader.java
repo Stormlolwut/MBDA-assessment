@@ -135,11 +135,19 @@ public class PokemonLoader implements Serializable {
     }
 
     public ArrayList<Pokemon> loadCustomPokemons(){
-       return CustomPokemonList = Writer.LoadAllPokemons(this.mContext);
+       ArrayList<Pokemon> pokemons = Writer.LoadAllPokemons(this.mContext);
+       for (Pokemon pokemon : pokemons)
+       {
+           if(pokemon.isFavorite() & !FavoriteList.contains(pokemon))
+           {
+               FavoriteList.add(pokemon);
+           }
+       }
+       return CustomPokemonList = pokemons;
     }
 
     private void loadPokemonBitMap(final Pokemon pokemon, String url) {
-        if (url != null & !url.isEmpty()) {
+        if (!url.equals("null")) {
             ImageRequest imageRequest = new ImageRequest(
                     url,
                     new Response.Listener<Bitmap>() {
