@@ -159,8 +159,11 @@ public class Writer {
     }
 
     public BitmapDrawable getPokemonBitmap(Resources resources){
-        File fileBitmap = new File(parent, mPokemon.getName() + ".BMP");
-        Bitmap bitmap = BitmapFactory.decodeFile(fileBitmap.getAbsolutePath());
-        return new BitmapDrawable(resources, bitmap);
+        try{
+            File fileBitmap = new File(parent, mPokemon.getName() + ".BMP");
+            Bitmap bitmap = BitmapFactory.decodeFile(fileBitmap.getAbsolutePath());
+            return new BitmapDrawable(resources, bitmap);
+        } catch (Exception e) { }
+        return new BitmapDrawable();
     }
 }
