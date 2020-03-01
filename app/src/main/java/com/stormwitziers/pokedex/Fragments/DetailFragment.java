@@ -19,9 +19,9 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.stormwitziers.pokedex.FileWriters.FavoritePokemon;
+import com.stormwitziers.pokedex.FileWriters.Writer;
 import com.stormwitziers.pokedex.MainActivity;
 import com.stormwitziers.pokedex.Pokemon;
-import com.stormwitziers.pokedex.PokemonList.PokemonLoader;
 import com.stormwitziers.pokedex.R;
 import com.stormwitziers.pokedex.RateMyPokemonDialogFragment;
 
@@ -147,8 +147,16 @@ public class DetailFragment extends Fragment  {
                 favoriteList.add(mCurrentPokemon);
                 mMainActivity.initializeSpinner();
 
+                if(mCurrentPokemon.isCustom())
+                {
+                    Writer writer = new Writer(mMainActivity, mCurrentPokemon);
+                    writer.enableFavorite(true);
+                }
+                else
+                {
+                    favoritePokemon.Save();
+                }
 
-                favoritePokemon.Save();
                 mCurrentPokemon.isFavorite(true);
                 SetFavIconOn(true);
                 mMainActivity.UpdateSpinnerPosition();
@@ -159,7 +167,15 @@ public class DetailFragment extends Fragment  {
             favoriteList.remove(mCurrentPokemon);
             mMainActivity.initializeSpinner();
 
-            favoritePokemon.Delete();
+            if(mCurrentPokemon.isCustom())
+            {
+                Writer writer = new Writer(mMainActivity, mCurrentPokemon);
+                writer.enableFavorite(false);
+            }
+            else
+            {
+                favoritePokemon.Delete();
+            }
             mCurrentPokemon.isFavorite(false);
             mCurrentPokemon.setRating(0);
             ratingBar.setRating(0);

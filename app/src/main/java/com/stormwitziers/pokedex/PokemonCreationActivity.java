@@ -95,6 +95,7 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
             return;
         }
 
+        // TODO: Pokemon Rating and Favorite zijn beiden false en 0.0 wanneer het niet zo is.
         Pokemon pokemon = new Pokemon(name.getText().toString(), image.getDrawable(), type.getSelectedItem().toString(), true);
         Writer writer = new Writer(this, pokemon);
 

@@ -94,6 +94,32 @@ public class Writer {
         save();
     }
 
+    public void enableFavorite(boolean value)
+    {
+        File filePokemon = new File(parent, mPokemon.getName() + ".json");
+
+        if(!value)
+        {
+            mPokemon.setRating(0);
+        }
+
+        try {
+            BufferedReader fileReader = new BufferedReader(new FileReader(filePokemon.getAbsolutePath()));
+            String content = fileReader.readLine();
+            JSONObject pokemonJson = new JSONObject(content);
+
+            pokemonJson.put("favorite", value);
+            pokemonJson.put("rating", mPokemon.getRating());
+
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filePokemon));
+            bufferedWriter.write(pokemonJson.toString());
+            bufferedWriter.close();
+
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static ArrayList<com.stormwitziers.pokedex.Pokemon> LoadAllPokemons(Context context) {
         ArrayList<com.stormwitziers.pokedex.Pokemon> pokemons = new ArrayList<>();
         File parent = new File(context.getFilesDir(), FOLDER_NAME);
