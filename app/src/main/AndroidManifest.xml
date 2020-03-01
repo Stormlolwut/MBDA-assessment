@@ -3,7 +3,6 @@
     package="com.stormwitziers.pokedex">
 
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -16,20 +15,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+        <activity android:name=".SettingsActivity"></activity>
 
         <provider
-            android:authorities="com.stormwitziers.pokedex.fileprovider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.stormwitziers.pokedex.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
         </provider>
 
         <service
             android:name=".PokemonService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -39,8 +40,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:parentActivityName=".MainActivity"
-            android:name=".PokemonCreationActivity" />
-
+            android:name=".PokemonCreationActivity"
+            android:parentActivityName=".MainActivity" />
     </application>
+
 </manifest>
