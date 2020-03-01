@@ -22,6 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
+        android:autoSizeTextType="none"
+        android:autoText="false"
+        android:maxLength="20"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/list_picture"
         app:layout_constraintTop_toTopOf="parent" />

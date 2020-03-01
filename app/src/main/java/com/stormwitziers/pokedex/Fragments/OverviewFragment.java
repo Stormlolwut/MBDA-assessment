@@ -1,5 +1,6 @@
 package com.stormwitziers.pokedex.Fragments;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -7,6 +8,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,8 +34,7 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
     private OnPokemonSelected mOnPokemonSelected;
     private MainActivity mMainActivity;
 
-    public void initialize(MainActivity mainActivity, PokemonLoader pokemonLoader)
-    {
+    public void initialize(MainActivity mainActivity, PokemonLoader pokemonLoader) {
         this.mMainActivity = mainActivity;
         this.mPokemonLoader = pokemonLoader;
     }
@@ -41,6 +43,8 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+
     }
 
 
@@ -51,12 +55,14 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
         View view = inflater.inflate(R.layout.overview_fragment, container, false);
         addPokemonsToRecycleView(view);
 
-
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            view.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        }
         return view;
     }
 
-    private void addPokemonsToRecycleView(View view){
-        mPokemonLoader = ((MainActivity)getActivity()).getPokemonLoader();
+    private void addPokemonsToRecycleView(View view) {
+        mPokemonLoader = ((MainActivity) getActivity()).getPokemonLoader();
         mAdapter = new PokemonAdapter(mPokemonLoader, this);
 
 
@@ -121,7 +127,7 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
         mAdapter.notifyItemChanged(pokemonPosition);
     }
 
-    public interface OnPokemonSelected{
+    public interface OnPokemonSelected {
         void onItemSelected(Pokemon pokemon);
     }
 }
