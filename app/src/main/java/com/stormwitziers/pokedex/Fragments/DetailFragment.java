@@ -147,13 +147,11 @@ public class DetailFragment extends Fragment  {
                 favoriteList.add(mCurrentPokemon);
                 mMainActivity.initializeSpinner();
 
-                if(mCurrentPokemon.isCustom())
-                {
+                if(mCurrentPokemon.isCustom()) {
                     Writer writer = new Writer(mMainActivity, mCurrentPokemon);
                     writer.enableFavorite(true);
                 }
-                else
-                {
+                else {
                     favoritePokemon.Save();
                 }
 
