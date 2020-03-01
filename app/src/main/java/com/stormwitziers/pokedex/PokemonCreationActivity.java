@@ -2,6 +2,7 @@ package com.stormwitziers.pokedex;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -99,9 +100,11 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         Pokemon pokemon = new Pokemon(name.getText().toString(), image.getDrawable(), type.getSelectedItem().toString(), true);
         Writer writer = new Writer(this, pokemon);
 
-        if (SettingsAppActivity.getInstance().switchPreference.isChecked()) {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("preferences", 0);
+
+        if (pref.getBoolean("autoFav", false)) {
             pokemon.isFavorite(true);
-            pokemon.setRating(SettingsAppActivity.getInstance().seekBarPreference.getValue());
+            pokemon.setRating(pref.getInt("setRating", 0));
         }
 
         if (mPreviousPokemon == null) writer.save();

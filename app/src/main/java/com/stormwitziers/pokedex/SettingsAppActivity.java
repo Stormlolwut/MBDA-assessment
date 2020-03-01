@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class SettingsAppActivity extends AppCompatActivity implements Serializable {
     private static SettingsActivity instance;
 
-    public static SettingsActivity getInstance() {
+    private static SettingsActivity getInstance() {
         if (instance == null) {
             instance = new SettingsActivity();
         }

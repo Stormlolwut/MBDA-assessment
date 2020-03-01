@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
@@ -35,6 +36,8 @@ import static com.stormwitziers.pokedex.PokemonService.POKEMON_NOTIFICATION_CHAN
 public class MainActivity extends AppCompatActivity implements OverviewFragment.OnPokemonSelected, RateMyPokemonDialogFragment.OnPokemonRatingDialogListener, Serializable {
 
     private Spinner mSpinner;
+
+    private static SettingsActivity settingInstance;
 
     private OverviewFragment.OnPokemonSelected mOnPokemonSelected;
     public ArrayAdapter<String> SpinnerAdapter;
@@ -174,7 +177,9 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     @Override
     protected void onStop() {
         super.onStop();
-        if(SettingsAppActivity.getInstance().notificationBarPreference.isChecked()){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("preferences", 0);
+
+        if(pref.getBoolean("notif", false)){
             mPokemonService = new Intent(this, PokemonService.class);
             mPokemonService.putExtra("favorites", mPokemonLoader);
             startService(mPokemonService);

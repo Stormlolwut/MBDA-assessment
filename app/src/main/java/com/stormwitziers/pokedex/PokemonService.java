@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -55,7 +56,9 @@ public class PokemonService extends Service {
         mRunnable = new Runnable() {
             @Override
             public void run() {
-                mNotificationDelay = (SettingsAppActivity.getInstance().notificationDelayPreference.getValue()) * 1000;
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("preferences", 0);
+
+                mNotificationDelay = (pref.getInt("notifDelay", 5)) * 1000;
                 mFavoriteList = mPokemonLoader.FavoriteList;
                 mHandler.postDelayed(this, mNotificationDelay);
 
