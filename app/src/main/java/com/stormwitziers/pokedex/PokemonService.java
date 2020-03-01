@@ -52,6 +52,7 @@ public class PokemonService extends Service {
         handler.post(new Runnable() {
             @Override
             public void run() {
+                mNotificationDelay = (SettingsAppActivity.getInstance().notificationDelayPreference.getValue()) * 1000;
                 mFavoriteList = mPokemonLoader.FavoriteList;
                 handler.postDelayed(this, mNotificationDelay);
 

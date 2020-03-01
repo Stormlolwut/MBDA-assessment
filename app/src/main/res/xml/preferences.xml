@@ -18,4 +18,20 @@
             android:title="Set to rate of favorited pokemon" />
 
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Notifications">
+
+        <SwitchPreferenceCompat
+            android:key="notif"
+            android:title="Enable Pokemon Notification"
+            android:summary="Allows the app to send you notifications for when you are gone."/>
+        <SeekBarPreference
+            app:min="5"
+            android:max="60"
+            app:showSeekBarValue="true"
+            android:key="notifDelay"
+            android:title="Notification delay timer"
+            android:summary="Sets the delay for when you want an other notification (Seconds)"/>
+    </PreferenceCategory>
+
 </PreferenceScreen>

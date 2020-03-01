@@ -174,10 +174,13 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     @Override
     protected void onStop() {
         super.onStop();
-
-        mPokemonService = new Intent(this, PokemonService.class);
-        mPokemonService.putExtra("favorites", mPokemonLoader);
-        startService(mPokemonService);
+        if(SettingsAppActivity.getInstance().notificationBarPreference.isChecked()){
+            mPokemonService = new Intent(this, PokemonService.class);
+            mPokemonService.putExtra("favorites", mPokemonLoader);
+            startService(mPokemonService);
+        } else if (mPokemonService != null){
+            stopService(mPokemonService);
+        }
     }
 
     @Override
