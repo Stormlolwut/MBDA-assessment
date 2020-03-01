@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class FavoritePokemon  {
-
-
     private static final String FAVORITE = "Favorite";
     private static final String FILE_NAME = "Favorites";
     private static final String NAME = "name";
@@ -86,6 +84,7 @@ public class FavoritePokemon  {
 
             // WRITE
             pokemonJson.remove(mPokemon.getName());
+
 
             SaveJsonToFile(favoriteFile, pokemonJson);
         } catch (IOException | JSONException e) {

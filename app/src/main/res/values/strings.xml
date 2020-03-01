@@ -4,6 +4,12 @@
     <string name="name">Name</string>
     <string name="save">Save</string>
     <string name="profile_picture">profilePicture</string>
+    <string name="chooser_title">Choose Image</string>
+    <string name="textview">pokemonNaam</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="plaatje">plaatje</string>
+    <string name="please_rate_this_pokemon">Please rate this pokemon!</string>
     <string-array name="string_pokemon_type_array">
         <item>Normal</item>
         <item>Fire</item>
