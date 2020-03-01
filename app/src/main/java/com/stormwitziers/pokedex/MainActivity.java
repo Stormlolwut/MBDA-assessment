@@ -55,8 +55,6 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
     private PokemonLoader mPokemonLoader;
 
-    private SettingsAppActivity mSettingsAppActivity;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -224,13 +222,6 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
                 startActivity(i);
             }
         }
-        else if(requestCode == SETTINGS_RESULT)
-        {
-            if(resultCode == RESULT_OK)
-            {
-                
-            }
-        }
     }
 
     private Pokemon getCustomPokemon(String name) {
@@ -282,8 +273,6 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
     public void OpenSettings() {
         Intent intent = new Intent(this, com.stormwitziers.pokedex.SettingsAppActivity.class);
-        startActivityForResult(intent, SETTINGS_RESULT);
-        intent.putExtra("theFragment", mSettingsAppActivity);
+        startActivity(intent);
     }
-
 }

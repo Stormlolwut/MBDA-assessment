@@ -4,12 +4,13 @@ import androidx.annotation.Nullable;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SeekBarPreference;
 import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import android.os.Bundle;
 
 public class SettingsActivity extends PreferenceFragmentCompat {
     public SeekBarPreference seekBarPreference;
-    public SwitchPreference switchPreference;
+    public SwitchPreferenceCompat switchPreference;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -17,7 +18,7 @@ public class SettingsActivity extends PreferenceFragmentCompat {
 
 
         seekBarPreference = (SeekBarPreference)findPreference("setRating");
-        switchPreference = (SwitchPreference)findPreference("autoFav");
+        switchPreference = (SwitchPreferenceCompat)findPreference("autoFav");
     }
 
     @Override

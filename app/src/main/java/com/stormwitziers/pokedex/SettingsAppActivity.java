@@ -1,25 +1,29 @@
 package com.stormwitziers.pokedex;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import java.io.Serializable;
 
 public class SettingsAppActivity extends AppCompatActivity implements Serializable {
+    private static SettingsActivity instance;
+
+    public static SettingsActivity getInstance() {
+        if (instance == null) {
+            instance = new SettingsActivity();
+        }
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_app);
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.setting_frame_layout, getInstance());
+        transaction.commit();
     }
 }

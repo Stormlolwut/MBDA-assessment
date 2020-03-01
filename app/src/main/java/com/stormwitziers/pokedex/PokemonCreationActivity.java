@@ -99,6 +99,12 @@ public class PokemonCreationActivity extends AppCompatActivity implements Adapte
         Pokemon pokemon = new Pokemon(name.getText().toString(), image.getDrawable(), type.getSelectedItem().toString(), true);
         Writer writer = new Writer(this, pokemon);
 
+        if(SettingsAppActivity.getInstance().switchPreference.isChecked())
+        {
+            pokemon.isFavorite(true);
+            pokemon.setRating(SettingsAppActivity.getInstance().seekBarPreference.getValue());
+        }
+
         if (mPreviousPokemon == null) writer.save();
         else {
             writer.update(mPreviousPokemon);
