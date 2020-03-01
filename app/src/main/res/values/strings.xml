@@ -10,6 +10,9 @@
     <string name="edit">Edit</string>
     <string name="plaatje">plaatje</string>
     <string name="please_rate_this_pokemon">Please rate this pokemon!</string>
+    <string name="favorite">Favorite</string>
+    <string name="search">Search</string>
+    <string name="preferences">preferences</string>
     <string-array name="string_pokemon_type_array">
         <item>Normal</item>
         <item>Fire</item>
