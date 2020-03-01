@@ -17,55 +17,55 @@
 
     <ImageButton
         android:id="@+id/pokemon_creation_profile_picture"
-        android:layout_width="152dp"
-        android:layout_height="152dp"
-        android:layout_marginStart="130dp"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="130dp"
         android:contentDescription="@string/profile_picture"
         android:onClick="ChooseProfilePicture"
+        android:src="@drawable/pokemon_bulbasaur"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:srcCompat="@tools:sample/avatars" />
 
     <EditText
         android:id="@+id/pokemon_creation_name"
-        android:layout_width="wrap_content"
+        android:layout_width="205dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/name"
         android:inputType="textPersonName"
+        android:maxLength="20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pokemon_creation_profile_picture"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/pokemon_creation_profile_picture" />
 
     <Spinner
         android:id="@+id/pokemon_creation_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="84dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/pokemon_creation_name" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:text="@string/type"
         android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/pokemon_creation_spinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pokemon_creation_name" />
 
     <Button
         android:id="@+id/button"
-        android:layout_width="wrap_content"
+        android:layout_width="88dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:onClick="savePokemon"

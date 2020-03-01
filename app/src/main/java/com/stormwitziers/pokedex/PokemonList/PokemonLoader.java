@@ -69,7 +69,6 @@ public class PokemonLoader implements Serializable {
         return !pokemon.isPresent();
     }
 
-
     public void loadPokemons() {
         final ArrayList<WebserviceFavoriteValues> favoriteNames = FavoritePokemon.LoadAllFavorites(mContext);
 
@@ -138,10 +137,13 @@ public class PokemonLoader implements Serializable {
        ArrayList<Pokemon> pokemons = Writer.LoadAllPokemons(this.mContext);
        for (Pokemon pokemon : pokemons)
        {
-           if(pokemon.isFavorite() & !FavoriteList.contains(pokemon))
-           {
-               FavoriteList.add(pokemon);
+           boolean isUnique = true;
+           for (Pokemon favPokemon : FavoriteList){
+               isUnique = !favPokemon.getName().equals(pokemon.getName());
+               if(!isUnique)break;
            }
+            if(isUnique) { FavoriteList.add(pokemon); }
+
        }
        return CustomPokemonList = pokemons;
     }
