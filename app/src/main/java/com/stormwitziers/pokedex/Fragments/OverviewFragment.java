@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -47,6 +48,17 @@ public class OverviewFragment extends Fragment implements PokemonAdapter.OnPokem
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.toolbar_settings:
+                mMainActivity.OpenSettings();
+                return true;
+            default:
+                return false;
+        }
+
+    }
 
     @Nullable
     @Override

@@ -28,7 +28,7 @@ import com.stormwitziers.pokedex.RateMyPokemonDialogFragment;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class DetailFragment extends Fragment  {
+public class DetailFragment extends Fragment {
     private MainActivity mMainActivity;
 
     private Pokemon mCurrentPokemon;
@@ -36,8 +36,7 @@ public class DetailFragment extends Fragment  {
     private MenuItem favoriteItem = null;
     private RatingBar ratingBar;
 
-    public void initialize(MainActivity mainActivity, Pokemon pokemon)
-    {
+    public void initialize(MainActivity mainActivity, Pokemon pokemon) {
         this.mCurrentPokemon = pokemon;
         this.mMainActivity = mainActivity;
     }
@@ -61,7 +60,7 @@ public class DetailFragment extends Fragment  {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View currentView = inflater.inflate(R.layout.detail_fragment, container, false);
 
-        if(mCurrentPokemon != null){
+        if (mCurrentPokemon != null) {
             setPokemon(currentView, mCurrentPokemon);
         }
 
@@ -78,7 +77,6 @@ public class DetailFragment extends Fragment  {
             }
         });
 
-        View view = ((AppCompatActivity) getActivity()).findViewById(R.id.toolbar_favorite);
         return currentView;
     }
 
@@ -87,12 +85,14 @@ public class DetailFragment extends Fragment  {
         switch (item.getItemId()) {
             case R.id.toolbar_favorite:
                 if (mCurrentPokemon == null) return false;
-                if(mCurrentPokemon.isFavorite()) {
+                if (mCurrentPokemon.isFavorite()) {
                     setFavoriteCurrentPokemon(false);
-                }
-                else {
+                } else {
                     ShowDialog();
                 }
+                return true;
+            case R.id.toolbar_settings:
+                mMainActivity.OpenSettings();
                 return true;
             default:
                 return false;
@@ -100,13 +100,13 @@ public class DetailFragment extends Fragment  {
 
     }
 
-    public void updatePokemonRating(float rating){
+    public void updatePokemonRating(float rating) {
         mCurrentPokemon.setRating(rating);
         RatingBar ratingBar = Objects.requireNonNull(getActivity()).findViewById(R.id.details_ratingbar);
         ratingBar.setRating(rating);
     }
 
-    private void setPokemon(View currentView, Pokemon pokemon){
+    private void setPokemon(View currentView, Pokemon pokemon) {
 
         TextView pokeName = currentView.findViewById(R.id.details_name);
         ImageView pokeImage = currentView.findViewById(R.id.details_picture);
@@ -121,7 +121,7 @@ public class DetailFragment extends Fragment  {
 
         ratingBar.setRating(pokemon.getRating());
 
-        if(pokemon.isCustom()){
+        if (pokemon.isCustom()) {
             editButton.setEnabled(true);
             deleteButton.setEnabled(true);
         }
@@ -131,25 +131,23 @@ public class DetailFragment extends Fragment  {
         FavoritePokemon favoritePokemon = new FavoritePokemon(getContext(), mCurrentPokemon);
         ArrayList<Pokemon> favoriteList = mMainActivity.getPokemonLoader().FavoriteList;
 
-        if(setFavorite)
-        {
+        if (setFavorite) {
             boolean contains = false;
-            for (Pokemon pokemon : favoriteList){
-                if(pokemon.getName().equals(mCurrentPokemon.getName())){
+            for (Pokemon pokemon : favoriteList) {
+                if (pokemon.getName().equals(mCurrentPokemon.getName())) {
                     contains = true;
                     break;
                 }
             }
 
-            if(!contains){
+            if (!contains) {
                 favoriteList.add(mCurrentPokemon);
                 mMainActivity.initializeSpinner();
 
-                if(mCurrentPokemon.isCustom()) {
+                if (mCurrentPokemon.isCustom()) {
                     Writer writer = new Writer(mMainActivity, mCurrentPokemon);
                     writer.enableFavorite(true);
-                }
-                else {
+                } else {
                     favoritePokemon.Save();
                 }
 
@@ -157,19 +155,14 @@ public class DetailFragment extends Fragment  {
                 SetFavIconOn(true);
                 mMainActivity.UpdateSpinnerPosition();
             }
-        }
-        else
-        {
+        } else {
             favoriteList.remove(mCurrentPokemon);
             mMainActivity.initializeSpinner();
 
-            if(mCurrentPokemon.isCustom())
-            {
+            if (mCurrentPokemon.isCustom()) {
                 Writer writer = new Writer(mMainActivity, mCurrentPokemon);
                 writer.enableFavorite(false);
-            }
-            else
-            {
+            } else {
                 favoritePokemon.Delete();
             }
             mCurrentPokemon.isFavorite(false);
@@ -196,12 +189,9 @@ public class DetailFragment extends Fragment  {
     }
 
     private void SetFavIconOn(boolean value) {
-        if(value)
-        {
+        if (value) {
             favoriteItem.setIcon(android.R.drawable.star_big_on);
-        }
-        else
-        {
+        } else {
             favoriteItem.setIcon(android.R.drawable.star_big_off);
         }
     }

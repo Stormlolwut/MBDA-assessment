@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     private final String DETAIL_VIEW_FRAGMENT_TAG = "fragment_details";
 
     private final int EDIT_POKEMON_RESULT = 1;
+    private final int SETTINGS_RESULT = 2;
 
     private FragmentManager mFragmentManager;
 
@@ -220,8 +221,6 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         pokemonCreation.putExtra("PokemonLoader", mPokemonLoader);
         pokemonCreation.putExtra("Pokemon", p);
         startActivityForResult(pokemonCreation, EDIT_POKEMON_RESULT);
-
-        //resetActivities();
     }
 
     @Override
@@ -281,5 +280,10 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
 
     public void UpdateSpinnerPosition() {
         mSpinner.setSelection(SpinnerAdapter.getCount() - 1, false);
+    }
+
+    public void OpenSettings() {
+        Intent intent = new Intent(this, com.stormwitziers.pokedex.SettingsAppActivity.class);
+        startActivity(intent);
     }
 }

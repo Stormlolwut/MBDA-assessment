@@ -14,4 +14,9 @@
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/toolbar_settings"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="preferences"
+        app:showAsAction="ifRoom" />
 </menu>
