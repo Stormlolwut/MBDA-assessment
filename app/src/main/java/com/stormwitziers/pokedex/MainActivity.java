@@ -189,9 +189,14 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
     }
 
     private void ResetActivity() {
+        if(mPokemonService != null){
+            this.getApplicationContext().stopService(mPokemonService);
+        }
+
         Intent i = new Intent(this.getApplicationContext(), MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
+
     }
 
     public void CreateNewPokemon(View v) {
@@ -229,6 +234,10 @@ public class MainActivity extends AppCompatActivity implements OverviewFragment.
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EDIT_POKEMON_RESULT) {
             if (resultCode == RESULT_OK) {
+                if(mPokemonService != null){
+                    this.getApplicationContext().stopService(mPokemonService);
+                }
+
                 Intent i = new Intent(this.getApplicationContext(), MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);

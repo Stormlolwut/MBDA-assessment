@@ -76,6 +76,7 @@ public class PokemonService extends Service {
     public void onDestroy() {
         super.onDestroy();
         mHandler.removeCallbacks(mRunnable);
+        stopSelf();
     }
 
     @Override
