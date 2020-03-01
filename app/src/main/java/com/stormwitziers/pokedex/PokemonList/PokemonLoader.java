@@ -142,7 +142,7 @@ public class PokemonLoader implements Serializable {
                isUnique = !favPokemon.getName().equals(pokemon.getName());
                if(!isUnique)break;
            }
-            if(isUnique) { FavoriteList.add(pokemon); }
+            if(isUnique && pokemon.isFavorite()) { FavoriteList.add(pokemon); }
 
        }
        return CustomPokemonList = pokemons;
